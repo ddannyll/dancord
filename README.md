@@ -59,7 +59,7 @@
 | message/react      | Reacts to a message given a messageId                            | PUT         |            |            |
 | message/details    | Returns the details of a message given a messageID               | GET         |            |            |
 | friends/add        | Adds a friend based on unique username                           | POST        |            |            |
-| friends/get        | Returns a list of all friends                                    | GET        |            |            |
+| friends/get        | Returns a list of all friends                                    | GET         |            |            |
 | profile/details    | Updates the current user's profile details                       | PUT         |            |            |
 | profile/details    | Returns a user's profile details                                 | GET         |            |            |
 
