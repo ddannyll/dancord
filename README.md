@@ -93,6 +93,4 @@
 | 'message-edited'  |             | channel \| user |            |
 | 'message-deleted' |             | channel \| user |            |
 | 'message-reacted' |             | channel \| user |            |
-|                   |             |                 |            |
-|                   |             |                 |            |
 
