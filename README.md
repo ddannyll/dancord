@@ -39,7 +39,7 @@
 | IdList              | `[string]`                                       |                                                                                 |
 | ServerDetails       | ServerBasicDetails &`{ channelIds: idList }`     | Sent from server to client                                                      |
 | ChannelDetails      | `{ name: string }`                               |                                                                                 |
-| MessageBasicDetails | `{ receiverId: string, message: string }`        | receiverId can be a channelId or userId<br /><br />. Sent from server to client |
+| MessageBasicDetails | `{ receiverId: string, message: string }`        | receiverId can be a channelId or userId. Sent from server to client |
 | Reaction            | `{ reaction: string, reactors: idList }`         |                                                                                 |
 | MessageDetails      | MessageBasicDetails &`{ reactions: [Reaction] }` | Sent from server to client                                                      |
 | UserDetails         | `{ username: string }`                           |                                                                                 |
