@@ -1,43 +1,47 @@
 # Dancord
 
 ## MVP Features
+
 - Authentication
-    - Login with google + username/password encryption
+  - Login with google + username/password encryption
 - Create server
-    - Server Name + Image
-    - Server invite link
+  - Server Name + Image
+  - Server invite link
 - Create channel within server
-    - Channels can be grouped into Categories
+  - Channels can be grouped into Categories
 - Messages
-    - Mentions
-    - Sending messages within a server
-    - Editing a message
-    - Embeds
-    - Ability to search for messages
+  - Mentions
+  - Sending messages within a server
+  - Editing a message
+  - Embeds
+  - Ability to search for messages
 - Reactions
 - Notifications
 - Realtime communication (socket.io)
-    - online/offline
-    - is typing...
+  - online/offline
+  - is typing...
 - Friends
-    - DMs
-    - Search for friend 
-    - Unique Username + Nickname
+  - DMs
+  - Search for friend
+  - Unique Username + Nickname
 - Users can update profile
-    - Profile Statuses
-
-
+  - Profile Statuses
 
 ## Data Types
-| Name    | Type  | Notes |
-| -------- | -------- | -------- |
-| Text     | Text     | Text     |
 
 
+| Name  | Type   | Notes |
+| ------- | -------- | :------ |
+| token | string |       |
+|       |        |       |
+|       |        |       |
+|       |        |       |
 
 ## Endpoints/Sockets
+
+
 | Endpoints          | Description                                                      | HTTP Method | Data Types | Exceptions |
-| ------------------ | ---------------------------------------------------------------- | ----------- | ---------- | ---------- |
+| -------------------- | ------------------------------------------------------------------ | ------------- | ------------ | ------------ |
 | auth/login         | Login to dancord via unique username, password                   | POST        |            |            |
 | auth/register      | Register into dancord via unique username, password              | POST        |            |            |
 | auth/logout        | Logs out the current user                                        | POST        |            |            |
@@ -59,27 +63,28 @@
 | message/react      | Reacts to a message given a messageId                            | PUT         |            |            |
 | message/details    | Returns the details of a message given a messageID               | GET         |            |            |
 | friends/add        | Adds a friend based on unique username                           | POST        |            |            |
-| friends/get        | Returns a list of all friends                                    | GET         |           |            |
+| friends/get        | Returns a list of all friends                                    | GET         |            |            |
 | profile/details    | Updates the current user's profile details                       | PUT         |            |            |
 | profile/details    | Returns a user's profile details                                 | GET         |            |            |
 
 
+| Socket Room Name | identifier            | Description                        |
+| ------------------ | ----------------------- | ------------------------------------ |
+| user             | `user-[userId]`       | Info only visible to specific user |
+| channel          | `channel-[channelId]` | Info visible to channel            |
+| server           | `server-[serverId]`   | Info visibile to specific server   |
 
 
-| Socket Room Name    | identifier        | Description                         |
-| ------- | --------------------- | ----------------------------------- |
-| user    | `user-[userId]`       | Info only visible to specific user  |
-| channel | `channel-[channelId]` | Info visible to channel             |
-| server  | `server-[serverId]`   | Info visibile to specific server    |
+| Socket Event      | Description | Sent To Room  | Data Types |
+| ------------------- | ------------- | --------------- | ------------ |
+| 'channel-created' |             | server        |            |
+| 'message-sent'    |             | channel\|user |            |
+| 'message-edited'  |             | channel\|user |            |
+| 'message-deleted' |             | channel\|user |            |
+| 'message-reacted' |             | channel\|user |            |
+|                   |             |               |            |
+|                   |             |               |            |
 
+### Socket Notes:
 
-
-| Socket Event      | Description | Sent To Room    | Data Types |
-| ----------------- | ----------- | --------------- | ---------- |
-| 'channel-created' |             | server          |            |
-| 'message-sent'    |             | channel \| user |            |
-| 'message-edited'  |             | channel \| user |            |
-| 'message-deleted' |             | channel \| user |            |
-| 'message-reacted' |             | channel \| user |            |
-|                   |             |                 |            |
-|                   |             |                 |            |
+Sockets are only used to
