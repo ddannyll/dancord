@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @unique
+  username String
+  nickname String?
+  hashPassword String
+  joinedServers Server[] @relation("JoinedServers")
+  ownedServers Server[] @relation("OwnedServers")
+  messages Message[] @relation("MessagePoster")
+}
+
+model Server {
+  id String @id @unique
+  owner User @relation("OwnedServers", fields: [ownerId], references: [id])
+  ownerId String @unique
+  users User[] @relation("JoinedServers")
+  channels Channel[]
+}
+
+model Channel {
+  id String @id @unique
+  server Server @relation(fields: [serverId], references: [id])
+  serverId String
+  messages Message[]
+  category String?
+}
+
+model Message {
+  id String @id @unique
+  author User @relation("MessagePoster", fields: [authorId], references: [id])
+  authorId String
+  timestamp DateTime
+  channel Channel? @relation(fields: [channelId], references: [id])
+  channelId String?
+  // TODO: Direct message integration
+}
