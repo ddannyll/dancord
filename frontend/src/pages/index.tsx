@@ -1,3 +1,17 @@
+import LoginForm from '@/components/LoginForm';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+
 export default function Index() {
-    return <div>Hello World</div>;
+    const { status } = useSession()
+    const router = useRouter()
+    if (status === 'unauthenticated') {
+        router.push('/login')
+    }
+
+    if (status === 'authenticated') {
+        return <div>Authenticated</div>
+    } else {
+        return <div>Loading</div>
+    }
 }
