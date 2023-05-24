@@ -25,7 +25,7 @@ export default function Register() {
     return (
         <div className="w-screen h-screen text-zinc-400 bg-zinc-700 flex justify-center items-center">
             <form onSubmit={handleSubmit(onSubmit)} className="shadow-md max-w-md w-full flex flex-col gap-2 p-6 bg-zinc-800 rounded">
-                <h1 className="text-zinc-50 text-xl font-medium text-center">Resgister To Dancord</h1>
+                <h1 className="text-zinc-50 text-xl font-medium text-center">Register To Dancord</h1>
 
                 <label htmlFor="email" className={labelClasses}>
                     EMAIL
