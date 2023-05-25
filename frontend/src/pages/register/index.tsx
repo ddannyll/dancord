@@ -1,14 +1,15 @@
-import { log } from 'console'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 type LoginInputs = {
-    email: string
+    username: string
     password: string
     confirmPassword: string
 }
 
 export default function Register() {
+    const router = useRouter()
     const {
         register,
         handleSubmit,
@@ -16,6 +17,7 @@ export default function Register() {
     } = useForm<LoginInputs>({reValidateMode: 'onChange'})
     const onSubmit: SubmitHandler<LoginInputs> = data => {
         console.log(data)
+        router.push('/login')
     }
     const labelClasses = 'text-zinc-400 font-bold text-sm mt-2 flex'
     const inputClasses = 'bg-zinc-900 p-2 w-full rounded'
@@ -27,13 +29,13 @@ export default function Register() {
             <form onSubmit={handleSubmit(onSubmit)} className="shadow-md max-w-md w-full flex flex-col gap-2 p-6 bg-zinc-800 rounded">
                 <h1 className="text-zinc-50 text-xl font-medium text-center">Register To Dancord</h1>
 
-                <label htmlFor="email" className={labelClasses}>
-                    EMAIL
+                <label htmlFor="username" className={labelClasses}>
+                    USERNAME
                     <RequiredStar />
-                    {errors.email && <span className='text-red-500 font-normal grow text-end'>Email is required</span>}
+                    {errors.username && <span className='text-red-500 font-normal grow text-end'>Username is required</span>}
                 </label>
-                <input id="email" type="text" className={inputClasses}
-                    {...register('email', {required: true})}
+                <input id="username" type="text" className={inputClasses}
+                    {...register('username', {required: true})}
                 />
 
                 <label htmlFor="password" className={labelClasses}>
@@ -41,7 +43,7 @@ export default function Register() {
                     <RequiredStar />
                     {errors.password && <span className='text-red-500 font-normal grow text-end'>Password is required</span>}
                 </label>
-                <input id="password" type="text" className={inputClasses}
+                <input id="password" type="password" className={inputClasses}
                     {...register('password', {required: true})}
                 />
 
@@ -50,7 +52,7 @@ export default function Register() {
                     <RequiredStar />
                     {errors.confirmPassword && <span className='text-red-500 font-normal grow text-end'>Passwords must match</span>}
                 </label>
-                <input id="confirmPassword" type="text" className={inputClasses}
+                <input id="confirmPassword" type="password" className={inputClasses}
                     {...register('confirmPassword', {
                         validate: (value, formValues) => value === formValues.password,
                     })}
