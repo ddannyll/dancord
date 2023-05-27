@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react';
 import { AuthContext } from './_app';
 import { useRouter } from 'next/router';
-import { Sidebar } from '@/components/Sidebar';
+import Layout from '@/components/Layout';
 
 export default function Index() {
     const {authUser} = useContext(AuthContext)
@@ -13,8 +13,6 @@ export default function Index() {
         }
     }, [authUser, router])
 
-    return <div className='bg-zinc-700 w-screen h-screen flex'>
-        <Sidebar />
-    </div>
+    return <Layout />
 }
 

@@ -15,7 +15,7 @@ const RequiredStar = () => (<div className="text-red-500 inline text-xs pl-1">*<
 
 export default function Login() {
     const router = useRouter()
-    const {setAuthUser} = useContext(AuthContext)
+    const {authUser, setAuthUser} = useContext(AuthContext)
     const { register, handleSubmit, formState: {errors} } = useForm<LoginInputs>()
 
     const onSubmit: SubmitHandler<LoginInputs> = data => {
