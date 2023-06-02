@@ -1,3 +1,5 @@
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Sidebar } from './Sidebar';
 
 export default function Layout({children} : {children?: React.ReactNode}) {
@@ -6,5 +8,8 @@ export default function Layout({children} : {children?: React.ReactNode}) {
         <main className='grow'>
             {children}
         </main>
+        <ToastContainer
+            theme="dark"
+        />
     </div>
 }
