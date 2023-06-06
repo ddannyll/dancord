@@ -1,14 +1,24 @@
 import { Fetcher } from 'swr'
 
-interface serverDetails {
+export interface serverDetails {
     name: string
     serverId: string
     channelIds: string[]
     image?: string,
 }
 
-interface channelDetails {
+export interface Reaction {
+    reaction: string
+    reactors: string[]
+}
 
+export interface Message {
+    message: string
+    messageId: string
+    reactions: Reaction[]
+    timeSent: Date
+    lastEdited: Date | null
+    sentBy: string
 }
 
 export const fetchAllServers: Fetcher<serverDetails[], string> = async (token) => {
@@ -39,5 +49,27 @@ export const fetchServer: Fetcher<serverDetails, {token: string, serverId: strin
         channelIds: ['server1_channel1', 'server1_channel2'],
         serverId: 'server1Id',
     }
+    return dummyData
+}
+
+export const fetchChannelMessages: Fetcher<Message[], {token: string, channelId: string}> = async ({token, channelId}) => {
+    const dummyData = [
+        {
+            message: 'Hello World',
+            messageId: 'message_1',
+            reactions: [],
+            timeSent: new Date('2022'),
+            lastEdited: null,
+            sentBy: 'danielwang',
+        },
+        {
+            message: 'Why hello there',
+            messageId: 'message_2',
+            reactions: [],
+            timeSent: new Date('2023'),
+            lastEdited: null,
+            sentBy: 'danielwang',
+        },
+    ]
     return dummyData
 }
