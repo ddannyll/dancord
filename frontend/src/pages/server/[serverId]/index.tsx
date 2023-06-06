@@ -1,4 +1,3 @@
-import ChannelsSidebar from '@/components/ChannelsSidebar';
 import Layout from '@/components/Layout';
 import { fetchServer } from '@/fetchers';
 import { AuthContext } from '@/pages/_app';
@@ -14,24 +13,7 @@ export default function Server() {
 
     return <Layout>
         <div className="flex h-full">
-            <ChannelsSidebar
-                server={{
-                    serverName: serverDetails?.name || '',
-                    serverId: serverId as string,
-                }}
-                channels={[
-                    {
-                        channelId: 'server1_channel1',
-                        channelName: 'first channel',
-                    },
-                    {
-                        channelId: 'server1_channel2',
-                        channelName: 'second channel',
-                    },
-                ]}
-                selectedChannel='server1_channel1'
-            />
-            {JSON.stringify(serverDetails)}
+            hello
         </div>
     </Layout>
 }
