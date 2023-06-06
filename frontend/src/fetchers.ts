@@ -7,6 +7,10 @@ interface serverDetails {
     image?: string,
 }
 
+interface channelDetails {
+
+}
+
 export const fetchAllServers: Fetcher<serverDetails[], string> = async (token) => {
     // TODO: replace stub code with backend request
     await new Promise(resolve => setTimeout(resolve, 1000)) // delay for simulate network delay

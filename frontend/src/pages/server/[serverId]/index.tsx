@@ -12,8 +12,8 @@ export default function Server() {
     const {data: serverDetails, isLoading, error} = useSWR({token: authUser?.token, serverId}, fetchServer)
 
     return <Layout>
-        <div className="flex h-full">
-            hello
+        <div className="text-slate-50">
+            Select a channel cuh
         </div>
     </Layout>
 }
