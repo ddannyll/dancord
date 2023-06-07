@@ -5,9 +5,10 @@ import Image from 'next/image'
 
 interface MessagesProps {
     messages: Message[]
+    className: string
 }
 
-export default function Messages({messages}: MessagesProps) {
+export default function Messages({messages, className}: MessagesProps) {
     const messageGroups: Message[][] = []
     // we need to group consecutive messages sent by the same user
     // so that we can append the sender's details at the top
@@ -26,7 +27,7 @@ export default function Messages({messages}: MessagesProps) {
         messageGroups.push(currentGroup)
     }
 
-    return <div className="w-full flex flex-col-reverse">
+    return <div className={`w-full flex flex-col-reverse ${className}`}>
         {[...messageGroups]
             .reverse()
             .map(messageGroup =>
@@ -42,17 +43,17 @@ function MessageGroup({messageGroup}: {messageGroup: Message[]}) {
     const senderId = messageGroup[0].sentBy
     const messages = messageGroup.map(m => <div
         key={m.messageId}
-        className="text-slate-200 py-0.5">
+        className="text-zinc-200 py-0.5">
         {m.message}
     </div>
     )
-    return <div className='flex mt-4'>
+    return <div className='flex my-2'>
         <div className="ml-6 mr-4 mt-1 w-[40px] h-[40px] rounded-full border overflow-hidden">
             {/*  TODO: GET THE CORRECT PROFILE PHOTO */}
             <FontAwesomeIcon icon={faUser} className="text-white w-full h-full" />
         </div>
         <div className="">
-            <h2 className='text-slate-50 text-lg font-medium'>{senderId} [change to name]</h2>
+            <h2 className='text-zinc-50 text-lg font-medium'>{senderId} [change to name]</h2>
             {messages}
         </div>
     </div>

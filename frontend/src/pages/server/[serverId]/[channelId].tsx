@@ -15,6 +15,9 @@ export default function Channel() {
     const messages = useMessage({channelId: channelId as string, token: authUser?.token || ''})
 
     return <Layout>
-        <Messages messages={messages}/>
+        <div className="flex flex-col w-full justify-between">
+            <Messages messages={messages} className='grow'/>
+            <input type="text" className='bg-zinc-600 m-6 mt-0 p-4 text-zinc-50'/>
+        </div>
     </Layout>
 }
