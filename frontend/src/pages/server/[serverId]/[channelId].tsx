@@ -1,5 +1,5 @@
 import Layout from '@/components/Layout';
-import Message from '@/components/Message';
+import Messages from '@/components/Messages';
 import { fetchServer } from '@/fetchers';
 import useMessage from '@/hooks/useMessage';
 import { AuthContext } from '@/pages/_app';
@@ -15,21 +15,6 @@ export default function Channel() {
     const messages = useMessage({channelId: channelId as string, token: authUser?.token || ''})
 
     return <Layout>
-        <div className="h-full flex-col-reverse text-slate-50">
-            {messages.map(m =>
-                <Message
-                    key={m.messageId}
-                    message={m.message}
-                    lastEdited={m.lastEdited}
-                    timeSent={m.timeSent}
-                    senderId={m.sentBy}
-                    messageId={m.messageId}
-                    // todo create hook to get these
-                    profilePicture={null}
-                    senderName={'get the proper name '}
-                />
-            )
-            }
-        </div>
+        <Messages messages={messages}/>
     </Layout>
 }

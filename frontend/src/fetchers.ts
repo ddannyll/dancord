@@ -60,7 +60,7 @@ export const fetchChannelMessages: Fetcher<Message[], {token: string, channelId:
             reactions: [],
             timeSent: new Date('2022'),
             lastEdited: null,
-            sentBy: 'danielwang',
+            sentBy: 'danielwangid',
         },
         {
             message: 'Why hello there',
@@ -68,7 +68,23 @@ export const fetchChannelMessages: Fetcher<Message[], {token: string, channelId:
             reactions: [],
             timeSent: new Date('2023'),
             lastEdited: null,
-            sentBy: 'danielwang',
+            sentBy: 'danielwangid',
+        },
+        {
+            message: 'fk u dwang',
+            messageId: 'message_3',
+            reactions: [],
+            timeSent: new Date('2024'),
+            lastEdited: null,
+            sentBy: 'nguyenid',
+        },
+        {
+            message: ':(',
+            messageId: 'message_4',
+            reactions: [],
+            timeSent: new Date('2025'),
+            lastEdited: null,
+            sentBy: 'danielwangid',
         },
     ]
     return dummyData
