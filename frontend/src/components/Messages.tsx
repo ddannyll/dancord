@@ -26,8 +26,15 @@ export default function Messages({messages}: MessagesProps) {
         messageGroups.push(currentGroup)
     }
 
-    return <div className="">
-        {messageGroups.map(messageGroup => <MessageGroup key={messageGroup[0].messageId} messageGroup={messageGroup} />) }
+    return <div className="w-full flex flex-col-reverse">
+        {[...messageGroups]
+            .reverse()
+            .map(messageGroup =>
+                <MessageGroup
+                    key={messageGroup[0].messageId}
+                    messageGroup={messageGroup}
+                />)
+        }
     </div>
 
 }
