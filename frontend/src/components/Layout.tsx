@@ -21,7 +21,7 @@ export default function Layout({children} : {children?: React.ReactNode}) {
     const serverId = router.query.serverId
     const {data: serverDetails, isLoading, error} = useSWR({token: authUser?.token, serverId}, fetchServer)
 
-    return <div className='bg-zinc-700 w-screen h-screen flex'>
+    return <div className='bg-zinc-700 w-screen h-screen overflow-hidden flex'>
         <Sidebar />
         <main className='grow flex'>
             {serverId && serverDetails && <ChannelsSidebar

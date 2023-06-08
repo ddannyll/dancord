@@ -27,15 +27,16 @@ export default function Messages({messages, className}: MessagesProps) {
         messageGroups.push(currentGroup)
     }
 
-    return <div className={`w-full flex flex-col-reverse ${className}`}>
-        {[...messageGroups]
-            .reverse()
-            .map(messageGroup =>
-                <MessageGroup
-                    key={messageGroup[0].messageId}
-                    messageGroup={messageGroup}
-                />)
-        }
+    return <div className={`w-full overflow-y-scroll ${className}`}>
+        <div className={'flex min-h-full flex-col justify-end'}>
+            {messageGroups
+                .map(messageGroup =>
+                    <MessageGroup
+                        key={messageGroup[0].messageId}
+                        messageGroup={messageGroup}
+                    />)
+            }
+        </div>
     </div>
 
 }
@@ -47,13 +48,13 @@ function MessageGroup({messageGroup}: {messageGroup: Message[]}) {
         {m.message}
     </div>
     )
-    return <div className='flex my-2'>
+    return <div className='flex mb-4'>
         <div className="ml-6 mr-4 mt-1 w-[40px] h-[40px] rounded-full border overflow-hidden">
             {/*  TODO: GET THE CORRECT PROFILE PHOTO */}
             <FontAwesomeIcon icon={faUser} className="text-white w-full h-full" />
         </div>
         <div className="">
-            <h2 className='text-zinc-50 text-lg font-medium'>{senderId} [change to name]</h2>
+            <h2 className='text-zinc-50 font-medium'>{senderId} [change to name]</h2>
             {messages}
         </div>
     </div>
