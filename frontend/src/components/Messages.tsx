@@ -1,7 +1,9 @@
 import { Message } from '@/fetchers'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import Image from 'next/image'
+import dayjs from 'dayjs'
+import calender from 'dayjs/plugin/calendar'
+import { useEffect, useState } from 'react'
 
 interface MessagesProps {
     messages: Message[]
@@ -40,21 +42,34 @@ export default function Messages({messages, className}: MessagesProps) {
     </div>
 
 }
+
+dayjs.extend(calender)
+const calenderConfig = {
+    sameDay: '[Today at] h:mm A',
+    nextDay: '[Tomorrow at] h:mm A',
+    lastDay: '[Yesterday at] h:mm A',
+    sameElse: 'DD/MM/YYYY h:mm A',
+}
+
 function MessageGroup({messageGroup}: {messageGroup: Message[]}) {
     const senderId = messageGroup[0].sentBy
     const messages = messageGroup.map(m => <div
         key={m.messageId}
-        className="text-zinc-200 py-0.5">
+        className="text-zinc-300 py-0.5">
         {m.message}
     </div>
     )
+
     return <div className='flex mb-4'>
         <div className="ml-6 mr-4 mt-1 w-[40px] h-[40px] rounded-full border overflow-hidden">
             {/*  TODO: GET THE CORRECT PROFILE PHOTO */}
             <FontAwesomeIcon icon={faUser} className="text-white w-full h-full" />
         </div>
         <div className="">
-            <h2 className='text-zinc-50 font-medium'>{senderId} [change to name]</h2>
+            <div className="flex gap-2 items-end">
+                <h2 className='text-zinc-50 font-medium'>{senderId} [change to name]</h2>
+                <h3 className='text-zinc-400 text-sm'>{dayjs(messageGroup[0].timeSent).calendar(null, calenderConfig)}</h3>
+            </div>
             {messages}
         </div>
     </div>

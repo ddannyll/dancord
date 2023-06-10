@@ -14,7 +14,7 @@ export default function Channel() {
     return <Layout>
         <div className="flex flex-col w-full justify-between">
             <Messages messages={messages} className='grow'/>
-            <input type="text" className='bg-zinc-600 m-6 mt-0 p-4 text-zinc-50' placeholder={`Message ${channelName}`}/>
+            <input type="text" className='bg-zinc-600 m-6 mt-0 py-4 px-6 text-zinc-50 focus:outline-none' placeholder={`Message ${channelName}`}/>
         </div>
     </Layout>
 }
