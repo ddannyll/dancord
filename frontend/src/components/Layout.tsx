@@ -1,7 +1,7 @@
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Sidebar } from './Sidebar';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { AuthContext } from '@/pages/_app';
 import { useRouter } from 'next/router';
 import ChannelsSidebar from './ChannelsSidebar';
@@ -19,7 +19,7 @@ export default function Layout({children} : {children?: React.ReactNode}) {
     }, [authUser?.token, router])
 
     const serverId = router.query.serverId
-    const {data: serverDetails, isLoading, error} = useSWR({token: authUser?.token, serverId}, fetchServer)
+    const {data: serverDetails} = useSWR({token: authUser?.token, serverId}, fetchServer)
 
     return <div className='bg-zinc-700 w-screen h-screen overflow-hidden flex'>
         <Sidebar />

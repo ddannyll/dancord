@@ -8,13 +8,13 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useContext, useEffect } from 'react'
 import { toast } from 'react-toastify'
-import useSWR, { Fetcher } from 'swr'
+import useSWR from 'swr'
 
 
 
 export function Sidebar() {
     const {authUser} = useContext(AuthContext)
-    const {data: serverDetailsList, error, isLoading} = useSWR(authUser?.token, fetchAllServers)
+    const {data: serverDetailsList, error } = useSWR(authUser?.token, fetchAllServers)
     // TODO: get servers the user is in and display them
 
     useEffect(() => {
