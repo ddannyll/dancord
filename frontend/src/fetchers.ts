@@ -1,6 +1,6 @@
 import { Fetcher } from 'swr'
 
-export interface serverDetails {
+export interface ServerDetails {
     name: string
     serverId: string
     channelIds: string[]
@@ -21,7 +21,12 @@ export interface Message {
     sentBy: string
 }
 
-export const fetchAllServers: Fetcher<serverDetails[], string> = async (token) => {
+export interface ChannelDetails {
+    channelId: string
+    channelName: string
+}
+
+export const fetchAllServers: Fetcher<ServerDetails[], string> = async (token) => {
     // TODO: replace stub code with backend request
     await new Promise(resolve => setTimeout(resolve, 1000)) // delay for simulate network delay
 
@@ -42,7 +47,7 @@ export const fetchAllServers: Fetcher<serverDetails[], string> = async (token) =
     return dummyData
 }
 
-export const fetchServer: Fetcher<serverDetails, {token: string, serverId: string}> = async ({token, serverId}) => {
+export const fetchServer: Fetcher<ServerDetails, {token: string, serverId: string}> = async ({token, serverId}) => {
     const dummyData = {
         name: 'server1',
         image: 'https://placehold.co/100x100.png',
@@ -52,7 +57,7 @@ export const fetchServer: Fetcher<serverDetails, {token: string, serverId: strin
     return dummyData
 }
 
-export const fetchChannelMessages: Fetcher<Message[], {token: string, channelId: string}> = async ({token, channelId}) => {
+export const fetchChannelMessages = async ({token, channelId}: {token: string, channelId:string}): Promise<Message[]> => {
     const dummyData = [
         {
             message: 'Hello World',
@@ -87,5 +92,16 @@ export const fetchChannelMessages: Fetcher<Message[], {token: string, channelId:
             sentBy: 'danielwangid',
         },
     ]
+    return dummyData
+}
+
+export const fetchChannelDetails = async ({token, channelId}: {token: string, channelId:string}) => {
+    await new Promise(resolve => setTimeout(resolve, 1000)) // delay for simulate network delay
+
+    const dummyData = {
+        channelName: 'channelName - fetchChannelDetails',
+        channelId,
+    }
+
     return dummyData
 }
