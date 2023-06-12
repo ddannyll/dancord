@@ -1,9 +1,8 @@
 import express from 'express'
 import http from 'http'
 import { Server } from 'socket.io'
-import { PrismaClient } from '@prisma/client'
+import authRouter from './routes/auth'
 
-const prisma = new PrismaClient()
 const app = express()
 const server = http.createServer(app)
 const io = new Server(server, {
@@ -13,20 +12,12 @@ const io = new Server(server, {
 })
 const port = 3000
 
+// Baseline request
 app.get('/', (_, res) => {
   res.status(200).send()
 })
 
-server.listen(port, () => console.log(`Running on port ${port}`))
+// Routes
+app.use('/auth', authRouter)
 
-// Server cleanup tasks
-server.addListener('close', async () => {
-  // Disconnect from prisma database
-  try {
-    await prisma.$disconnect()
-  } catch (e) {
-    console.error(e)
-    await prisma.$disconnect()
-    process.exit(1)
-  }
-})
+server.listen(port, () => console.log(`Running on port ${port}`))
