@@ -2,7 +2,7 @@ import {  faHashtag } from '@fortawesome/free-solid-svg-icons'
 import { faSquarePlus } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import * as Dialog from '@radix-ui/react-dialog';
 
@@ -44,6 +44,16 @@ interface ChannelListingProps {
 }
 function ChannelListing({channelName, href, highlighted, deleteChannel, editChannelName}: ChannelListingProps) {
     const [isEditing, setIsEditing] = useState(false)
+    const [confirmDelete, setConfirmDelete] = useState(false)
+
+    const handleDeleteClick = (e: React.MouseEvent) => {
+        e.preventDefault()
+        if (!confirmDelete) {
+            setConfirmDelete(true)
+        } else {
+            // TODO: delete
+        }
+    }
 
     let className = 'hover:bg-zinc-700/50 rounded mx-2'
     if (highlighted) {
@@ -74,8 +84,15 @@ function ChannelListing({channelName, href, highlighted, deleteChannel, editChan
                         Edit Channel Name
                     </ContextMenu.Item>
                     <ContextMenu.Item
+                        onMouseOut={() => setConfirmDelete(false)}
+                        onClick={handleDeleteClick}
                         className='rounded-sm py-1 px-3 hover:outline-none text-red-500 hover:bg-red-500 hover:text-zinc-200 hover:cursor-pointer'>
-                        Delete Channel
+                        {confirmDelete
+                            ?
+                            <>Confirm Delete</>
+                            :
+                            <>Delete CHannel</>
+                        }
                     </ContextMenu.Item>
                 </ContextMenu.Content>
             </ContextMenu.Portal>

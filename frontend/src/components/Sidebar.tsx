@@ -41,7 +41,10 @@ export function Sidebar() {
                 }
             </ServerIcon>
         )}
-
+        <button
+            className='w-[50px] h-[50px] bg-zinc-800 rounded-xl grid place-items-center hover:rounded-xl hover:bg-violet-500 transition-all overflow-hidden'>
+                +
+        </button>
     </div>
 }
 
