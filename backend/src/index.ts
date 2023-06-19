@@ -12,6 +12,9 @@ const io = new Server(server, {
 })
 const port = 3000
 
+// middleware
+app.use(express.json())
+
 // Baseline request
 app.get('/', (_, res) => {
   res.status(200).send()
