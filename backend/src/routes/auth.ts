@@ -19,6 +19,7 @@ router.post('/register', async (req, res) => {
   const { username, password } = req.body
   if (!username || !password) {
     res.status(403).send({ error: 'Empty email or password' })
+    return
   }
 
   let user
@@ -61,6 +62,7 @@ router.post('/login', async (req, res) => {
   const { username, password } = req.body
   if (!username || !password) {
     res.status(403).send({ error: 'Invalid Input' })
+    return
   }
 
   const hashPassword = crypto.SHA256(password).toString()
@@ -72,6 +74,7 @@ router.post('/login', async (req, res) => {
   })
   if (!user) {
     res.status(403).send({ error: 'Username or password is incorrect' })
+    return
   }
 
   const token = generateJWT((user as User).id)
