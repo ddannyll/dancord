@@ -8,10 +8,17 @@ import 'dotenv/config'
 
 const router = express.Router()
 
+const expireDuration = 3 * 24 * 60 * 60
+const generateJWT = (id: string) => {
+  return jwt.sign({ id }, process.env.JWT_TOKEN_SECRET || 'default-secret', {
+    expiresIn: expireDuration,
+  })
+}
+
 router.post('/register', async (req, res) => {
   const { username, password } = req.body
   if (!username || !password) {
-    res.status(403).send({ error: 'Invalid Input' })
+    res.status(403).send({ error: 'Empty email or password' })
   }
 
   let user
@@ -45,12 +52,9 @@ router.post('/register', async (req, res) => {
     throw e
   }
 
-  const token = jwt.sign(
-    user as User,
-    process.env.ACCESS_TOKEN_SECRET || 'default-secret'
-  )
-
-  res.status(200).send({ token })
+  const token = generateJWT(user.id)
+  res.cookie('jwt', token, { httpOnly: true, maxAge: expireDuration * 1000 })
+  res.status(200).send({ id: user.id })
 })
 
 router.post('/login', async (req, res) => {
@@ -70,12 +74,14 @@ router.post('/login', async (req, res) => {
     res.status(403).send({ error: 'Username or password is incorrect' })
   }
 
-  const token = jwt.sign(
-    user as User,
-    process.env.ACCESS_TOKEN_SECRET || 'default-secret'
-  )
+  const token = generateJWT((user as User).id)
+  res.cookie('jwt', token, { httpOnly: true, maxAge: expireDuration * 1000 })
+  res.status(200).send({ id: (user as User).id })
+})
 
-  res.status(200).send({ token })
+router.post('/logout', async (_req, res) => {
+  res.clearCookie('jwt')
+  res.status(200)
 })
 
 export default router
