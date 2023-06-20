@@ -55,7 +55,7 @@ router.post('/register', async (req, res) => {
 
   const token = generateJWT(user.id)
   res.cookie('jwt', token, { httpOnly: true, maxAge: expireDuration * 1000 })
-  res.status(200).send({ id: user.id })
+  res.status(200).send({ token })
 })
 
 router.post('/login', async (req, res) => {
@@ -79,7 +79,7 @@ router.post('/login', async (req, res) => {
 
   const token = generateJWT((user as User).id)
   res.cookie('jwt', token, { httpOnly: true, maxAge: expireDuration * 1000 })
-  res.status(200).send({ id: (user as User).id })
+  res.status(200).send({ token })
 })
 
 router.post('/logout', async (_req, res) => {
