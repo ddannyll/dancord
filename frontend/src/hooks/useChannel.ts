@@ -1,4 +1,5 @@
 import { Message, fetchChannelDetails, fetchChannelMessages, postMessage } from '@/fetchers'
+import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
@@ -28,19 +29,24 @@ export default function useChannel({channelId, token}: ChannelIdToken) {
     const sendMessage = async (messageText: string) => {
         const newMessage = {
             message: messageText,
-            messageId: 'placeholder',
+            messageId: uuidv4(),
             reactions: [],
             timeSent: new Date(),
             lastEdited: null,
-            sentBy: 'placeholder',
+            sentBy: 'nguyenid',
 
         }
-        await mutateMessages(postMessage(token, channelId, messageText),
-            {
-                optimisticData: [...messages, newMessage],
-                rollbackOnError: true,
-                revalidate: false,
-            }
+        await mutateMessages(async () => {
+            console.log('test');
+            const newMessage = await postMessage(token, channelId, messageText)
+
+            return [...messages, newMessage]
+        },
+        {
+            optimisticData: [...messages, newMessage],
+            rollbackOnError: true,
+            revalidate: true,
+        }
         )
     }
 

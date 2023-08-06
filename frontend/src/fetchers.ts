@@ -1,4 +1,5 @@
 import { Fetcher } from 'swr'
+import { v4 as uuidv4 } from 'uuid'
 
 export interface ServerDetails {
     name: string
@@ -57,42 +58,43 @@ export const fetchServer: Fetcher<ServerDetails, {token: string, serverId: strin
     return dummyData
 }
 
+const dummyMessages: Message[] = [
+    {
+        message: 'Hello World',
+        messageId: 'message_1',
+        reactions: [],
+        timeSent: new Date('2022'),
+        lastEdited: null,
+        sentBy: 'danielwangid',
+    },
+    {
+        message: 'Why hello there',
+        messageId: 'message_2',
+        reactions: [],
+        timeSent: new Date('2023'),
+        lastEdited: null,
+        sentBy: 'danielwangid',
+    },
+    {
+        message: 'fk u dwang',
+        messageId: 'message_3',
+        reactions: [],
+        timeSent: new Date('2024'),
+        lastEdited: null,
+        sentBy: 'nguyenid',
+    },
+    {
+        message: ':(',
+        messageId: 'message_4',
+        reactions: [],
+        timeSent: new Date('2025'),
+        lastEdited: null,
+        sentBy: 'danielwangid',
+    },
+]
+
 export const fetchChannelMessages = async ({token, channelId}: {token: string, channelId:string}): Promise<Message[]> => {
-    const dummyData = [
-        {
-            message: 'Hello World',
-            messageId: 'message_1',
-            reactions: [],
-            timeSent: new Date('2022'),
-            lastEdited: null,
-            sentBy: 'danielwangid',
-        },
-        {
-            message: 'Why hello there',
-            messageId: 'message_2',
-            reactions: [],
-            timeSent: new Date('2023'),
-            lastEdited: null,
-            sentBy: 'danielwangid',
-        },
-        {
-            message: 'fk u dwang',
-            messageId: 'message_3',
-            reactions: [],
-            timeSent: new Date('2024'),
-            lastEdited: null,
-            sentBy: 'nguyenid',
-        },
-        {
-            message: ':(',
-            messageId: 'message_4',
-            reactions: [],
-            timeSent: new Date('2025'),
-            lastEdited: null,
-            sentBy: 'danielwangid',
-        },
-    ]
-    return dummyData
+    return dummyMessages
 }
 
 export const fetchChannelDetails = async ({token, channelId}: {token: string, channelId:string}) => {
@@ -106,8 +108,19 @@ export const fetchChannelDetails = async ({token, channelId}: {token: string, ch
     return dummyData
 }
 
-export const postMessage = async (token: string, channelId: string, message: string): Promise<Message[]> => {
-    await new Promise(resolve => setTimeout(resolve, 5000)) // delay for simulate network delay
-    throw new Error('Failed to add new message')
-    return []
+export const postMessage = async (token: string, channelId: string, message: string): Promise<Message> => {
+    await new Promise(resolve => setTimeout(resolve, 1000)) // delay for simulate network delay
+    if (message.includes('bad')) {
+        throw new Error('Failed to add new message')
+    }
+    const newMessage: Message = {
+        message,
+        messageId: uuidv4(),
+        reactions: [],
+        timeSent: new Date(),
+        lastEdited: null,
+        sentBy: 'nguyenid',
+    }
+    dummyMessages.push(newMessage)
+    return newMessage
 }

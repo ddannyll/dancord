@@ -19,10 +19,12 @@ export default function Channel() {
         }
 
         const messageText = (e.currentTarget as HTMLInputElement).value
+
         try {
+            (e.currentTarget as HTMLInputElement).value = ''
             await sendMessage(messageText)
         } catch (err) {
-            toast.error('Failed to send message');
+            toast.error('Failed to send message')
         }
     }
 
