@@ -105,3 +105,9 @@ export const fetchChannelDetails = async ({token, channelId}: {token: string, ch
 
     return dummyData
 }
+
+export const postMessage = async (token: string, channelId: string, message: string): Promise<Message[]> => {
+    await new Promise(resolve => setTimeout(resolve, 5000)) // delay for simulate network delay
+    throw new Error('Failed to add new message')
+    return []
+}

@@ -1,4 +1,4 @@
-export default function CHannelUsersSidebar() {
+export default function ChannelUsersSidebar() {
     return <div>
         test
     </div>

@@ -1,4 +1,4 @@
-import { Message, fetchChannelDetails, fetchChannelMessages } from '@/fetchers'
+import { Message, fetchChannelDetails, fetchChannelMessages, postMessage } from '@/fetchers'
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
@@ -16,7 +16,7 @@ interface ChannelIdToken {
 export default function useChannel({channelId, token}: ChannelIdToken) {
     const [messages, setMessages] = useState<Message[]>([])
 
-    const {data: initialMessages} = useSWR(
+    const {data: initialMessages, mutate: mutateMessages} = useSWR(
         [fetchChannelMessages, {channelId, token}],
         applyFn<Parameters<typeof fetchChannelMessages>[0], ReturnType<typeof fetchChannelMessages>>
     )
@@ -25,11 +25,30 @@ export default function useChannel({channelId, token}: ChannelIdToken) {
         applyFn<Parameters<typeof fetchChannelDetails>[0], ReturnType<typeof fetchChannelDetails>>
     )
 
+    const sendMessage = async (messageText: string) => {
+        const newMessage = {
+            message: messageText,
+            messageId: 'placeholder',
+            reactions: [],
+            timeSent: new Date(),
+            lastEdited: null,
+            sentBy: 'placeholder',
+
+        }
+        await mutateMessages(postMessage(token, channelId, messageText),
+            {
+                optimisticData: [...messages, newMessage],
+                rollbackOnError: true,
+                revalidate: false,
+            }
+        )
+    }
+
     useEffect(() => {
         if (initialMessages) {
             setMessages(initialMessages)
         }
     }, [initialMessages])
 
-    return {messages, channelName: channelDetails?.channelName}
+    return {messages, channelName: channelDetails?.channelName, sendMessage, mutateMessages}
 }
