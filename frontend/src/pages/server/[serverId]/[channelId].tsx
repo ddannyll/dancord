@@ -11,7 +11,7 @@ export default function Channel() {
     const router = useRouter()
     const {authUser} = useContext(AuthContext)
     const channelId = router.query.channelId
-    const {messages, channelName, sendMessage, mutateMessages} = useChannel({channelId: channelId as string, token: authUser?.token || ''})
+    const {messages, channelName, sendMessage} = useChannel({channelId: channelId as string, token: authUser?.token || ''})
 
     const handleInputKeyUp = async (e: React.KeyboardEvent) => {
         if (e.key !== 'Enter') {

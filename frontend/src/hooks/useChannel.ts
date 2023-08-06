@@ -50,5 +50,5 @@ export default function useChannel({channelId, token}: ChannelIdToken) {
         }
     }, [initialMessages])
 
-    return {messages, channelName: channelDetails?.channelName, sendMessage, mutateMessages}
+    return {messages, channelName: channelDetails?.channelName, sendMessage}
 }
