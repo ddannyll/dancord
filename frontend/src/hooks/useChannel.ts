@@ -52,8 +52,6 @@ export default function useChannel({channelId, token}: ChannelIdToken) {
 
     const deleteMessage = async (messageId: string) => {
         const newMessages = messages.filter(message => message.messageId !== messageId)
-        console.log(newMessages);
-
         await mutateMessages(async () => {
             await deleteMessageRequest(token, messageId)
             return []

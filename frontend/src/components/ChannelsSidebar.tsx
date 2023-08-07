@@ -113,7 +113,9 @@ function ChannelListing({channelName, href, highlighted, deleteChannel, editChan
                             className='bg-red-400 py-2 px-4 transition-colors hover:bg-red-500 active:bg-red-600'>
                             Cancel
                         </button>
-                        <button className='bg-violet-500 py-2 px-4 transition-colors hover:bg-violet-600 active:bg-violet-700'>
+                        <button
+                            onClick={() => setIsEditing(false)}
+                            className='bg-violet-500 py-2 px-4 transition-colors hover:bg-violet-600 active:bg-violet-700'>
                             Save
                         </button>
                     </div>

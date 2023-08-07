@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import { useEffect, useRef, useState } from 'react';
 
+const NEW_GROUP_TIME_DELTA_THRESHOLD = 6 * 60 * 1000
 
 interface MessagesProps {
     messages: Message[]
@@ -19,14 +20,18 @@ export default function Messages({messages, className, deleteMessage, editMessag
     // so that we can append the sender's details at the top
     let currentGroup: Message[] = []
     let prevSender: null | string = null
+    let prevTimeSent = new Date(0)
     for (let i = 0; i < messages.length; i++) {
         const currMessage = messages[i]
-        if (prevSender !== currMessage.sentBy && currentGroup.length > 0) {
+        const timeDeltaMs = currMessage.timeSent.getTime() - prevTimeSent.getTime()
+        if ((prevSender !== currMessage.sentBy || timeDeltaMs >= NEW_GROUP_TIME_DELTA_THRESHOLD)
+            && currentGroup.length > 0) {
             messageGroups.push(currentGroup)
             currentGroup = []
         }
         currentGroup.push(currMessage)
         prevSender = currMessage.sentBy
+        prevTimeSent = currMessage.timeSent
     }
     if (currentGroup.length > 0) {
         messageGroups.push(currentGroup)
@@ -107,7 +112,6 @@ function Message({message, onEdit, onDelete, optimistic}: MessageProps) {
 
     const handleEditFormSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        console.log('test')
         interface formInterface extends HTMLElement {
             editInput: HTMLInputElement
         }
@@ -144,8 +148,15 @@ function Message({message, onEdit, onDelete, optimistic}: MessageProps) {
                             <button onClick={(e: React.SyntheticEvent) => {
                                 e.preventDefault()
                                 setIsEditing(false)
-                            }}>cancel</button>
-                            <button>save</button>
+                            }}>
+                                cancel
+                            </button>
+                            <button
+                                type='submit'
+                                onClick={() => setTimeout(() => setIsEditing(false), 0)}
+                            >
+                                save
+                            </button>
                         </div>
                     </form>
                     :
