@@ -1,6 +1,26 @@
 import './globals.css'
-
 import type { AppProps } from 'next/app';
-export default function MyApp({ Component, pageProps }: AppProps) {
-    return <Component {...pageProps} />;
+import { createContext, useState } from 'react';
+
+interface AuthUser {
+    token: string
+    user: string
+}
+
+interface AuthContextInterface {
+    authUser: AuthUser | null,
+    setAuthUser: ((authUser: AuthUser) => void) | null
+}
+
+export const AuthContext = createContext<AuthContextInterface>({authUser: null, setAuthUser: null})
+
+export default function MyApp({ Component, pageProps: {...pageProps} }: AppProps) {
+    const [authUser, setAuthUser] = useState<AuthUser|null>(null)
+    console.log({authUser})
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (
+        <AuthContext.Provider value={{authUser, setAuthUser}}>
+            <Component {...pageProps} />
+        </AuthContext.Provider>
+    )
 }
