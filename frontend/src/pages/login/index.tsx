@@ -21,7 +21,7 @@ export default function Login() {
     const onSubmit: SubmitHandler<LoginInputs> = data => {
         console.log(data)
         if (data.username === 'd' && data.password === 'w' && setAuthUser) {
-            setAuthUser({token: 'cooltoken', user: 'danielwang'})
+            setAuthUser({token: 'cooltoken', user: 'danielwangid'})
             router.push('/')
         }
     }

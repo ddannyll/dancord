@@ -1,7 +1,8 @@
-import { Message, fetchChannelDetails, fetchChannelMessages, postMessage } from '@/fetchers'
+import { Message, deleteMessageRequest, fetchChannelDetails, fetchChannelMessages, postMessageRequest } from '@/fetchers'
 import { v4 as uuidv4 } from 'uuid';
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import useSWR from 'swr'
+import { AuthContext } from '@/pages/_app';
 
 
 
@@ -16,6 +17,8 @@ interface ChannelIdToken {
 
 export default function useChannel({channelId, token}: ChannelIdToken) {
     const [messages, setMessages] = useState<Message[]>([])
+    const {authUser} = useContext(AuthContext)
+
 
     const {data: initialMessages, mutate: mutateMessages} = useSWR(
         [fetchChannelMessages, {channelId, token}],
@@ -27,27 +30,39 @@ export default function useChannel({channelId, token}: ChannelIdToken) {
     )
 
     const sendMessage = async (messageText: string) => {
-        const newMessage = {
+        const newMessage: Message = {
             message: messageText,
-            messageId: uuidv4(),
+            messageId: 'tmp ' + uuidv4(),
             reactions: [],
             timeSent: new Date(),
             lastEdited: null,
-            sentBy: 'nguyenid',
-
+            sentBy: authUser?.user as string,
+            optimistic: true,
         }
         await mutateMessages(async () => {
-            console.log('test');
-            const newMessage = await postMessage(token, channelId, messageText)
-
+            const newMessage = await postMessageRequest(token, channelId, messageText)
             return [...messages, newMessage]
         },
         {
             optimisticData: [...messages, newMessage],
             rollbackOnError: true,
             revalidate: true,
-        }
-        )
+        })
+    }
+
+    const deleteMessage = async (messageId: string) => {
+        const newMessages = messages.filter(message => message.messageId !== messageId)
+        console.log(newMessages);
+
+        await mutateMessages(async () => {
+            await deleteMessageRequest(token, messageId)
+            return []
+        },
+        {
+            optimisticData: [...newMessages],
+            rollbackOnError: true,
+            revalidate: true,
+        })
     }
 
     useEffect(() => {
@@ -56,5 +71,10 @@ export default function useChannel({channelId, token}: ChannelIdToken) {
         }
     }, [initialMessages])
 
-    return {messages, channelName: channelDetails?.channelName, sendMessage}
+    return {
+        messages,
+        channelName: channelDetails?.channelName,
+        sendMessage,
+        deleteMessage,
+    }
 }

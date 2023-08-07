@@ -1,17 +1,16 @@
 import Layout from '@/components/Layout';
 import Messages from '@/components/Messages';
-import { postMessage } from '@/fetchers';
 import useChannel from '@/hooks/useChannel';
 import { AuthContext } from '@/pages/_app';
 import { useRouter } from 'next/router';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { toast } from 'react-toastify';
 
 export default function Channel() {
     const router = useRouter()
     const {authUser} = useContext(AuthContext)
     const channelId = router.query.channelId
-    const {messages, channelName, sendMessage} = useChannel({channelId: channelId as string, token: authUser?.token || ''})
+    const {messages, channelName, sendMessage, deleteMessage} = useChannel({channelId: channelId as string, token: authUser?.token || ''})
 
     const handleInputKeyUp = async (e: React.KeyboardEvent) => {
         if (e.key !== 'Enter') {
@@ -31,6 +30,7 @@ export default function Channel() {
     return <Layout>
         <div className="flex flex-col w-full justify-between">
             <Messages
+                deleteMessage={deleteMessage}
                 messages={messages}
                 className='grow px-6'
             />

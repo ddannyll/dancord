@@ -20,6 +20,7 @@ export interface Message {
     timeSent: Date
     lastEdited: Date | null
     sentBy: string
+    optimistic?: boolean
 }
 
 export interface ChannelDetails {
@@ -58,7 +59,7 @@ export const fetchServer: Fetcher<ServerDetails, {token: string, serverId: strin
     return dummyData
 }
 
-const dummyMessages: Message[] = [
+let dummyMessages: Message[] = [
     {
         message: 'Hello World',
         messageId: 'message_1',
@@ -108,7 +109,7 @@ export const fetchChannelDetails = async ({token, channelId}: {token: string, ch
     return dummyData
 }
 
-export const postMessage = async (token: string, channelId: string, message: string): Promise<Message> => {
+export const postMessageRequest = async (token: string, channelId: string, message: string): Promise<Message> => {
     await new Promise(resolve => setTimeout(resolve, 1000)) // delay for simulate network delay
     if (message.includes('bad')) {
         throw new Error('Failed to add new message')
@@ -119,8 +120,14 @@ export const postMessage = async (token: string, channelId: string, message: str
         reactions: [],
         timeSent: new Date(),
         lastEdited: null,
-        sentBy: 'nguyenid',
+        sentBy: 'danielwangid',
     }
     dummyMessages.push(newMessage)
     return newMessage
+}
+
+export const deleteMessageRequest = async (token: string, messageId: string): Promise<boolean> => {
+    await new Promise(resolve => setTimeout(resolve, 1000)) // delay for simulate network delay
+    dummyMessages = dummyMessages.filter(message => message.messageId !== messageId)
+    return true
 }

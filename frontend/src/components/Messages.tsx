@@ -9,9 +9,10 @@ import { useEffect, useRef, useState } from 'react';
 interface MessagesProps {
     messages: Message[]
     className: string
+    deleteMessage: (messageId: string) => void
 }
 
-export default function Messages({messages, className}: MessagesProps) {
+export default function Messages({messages, className, deleteMessage}: MessagesProps) {
     const messageGroups: Message[][] = []
     // we need to group consecutive messages sent by the same user
     // so that we can append the sender's details at the top
@@ -36,6 +37,7 @@ export default function Messages({messages, className}: MessagesProps) {
             {messageGroups
                 .map(messageGroup =>
                     <MessageGroup
+                        deleteMessage={deleteMessage}
                         key={messageGroup[0].messageId}
                         messageGroup={messageGroup}
                     />)
@@ -46,10 +48,19 @@ export default function Messages({messages, className}: MessagesProps) {
 }
 
 
-function MessageGroup({messageGroup}: {messageGroup: Message[]}) {
+interface MessageGroupProps {
+    messageGroup: Message[]
+    deleteMessage: (messageId: string) => void
+}
+function MessageGroup({messageGroup, deleteMessage}: MessageGroupProps) {
     const senderId = messageGroup[0].sentBy
     const messages = messageGroup.map(m =>
-        <Message message={m.message} key={m.messageId}/>
+        <Message
+            message={m.message}
+            key={m.messageId}
+            onDelete={() => deleteMessage(m.messageId)}
+            optimistic={m.optimistic}
+        />
     )
 
     return <div className='flex mb-4'>
@@ -71,12 +82,14 @@ interface MessageProps {
     message: string
     onEdit?: React.MouseEventHandler<HTMLElement>
     onDelete?: React.MouseEventHandler<HTMLElement>
+    optimistic?: boolean
 }
-function Message({message, onEdit, onDelete}: MessageProps) {
+function Message({message, onEdit, onDelete, optimistic}: MessageProps) {
     const [isEditing, setIsEditing] = useState(false)
     const editInput = useRef<HTMLInputElement>(null)
 
     useEffect(() => {
+        // This Effect auto focuses the input when edit btn is pressed
         // Im not sure why this works but it does
         let timeout: ReturnType<typeof setTimeout>
         if (isEditing) {
@@ -90,7 +103,10 @@ function Message({message, onEdit, onDelete}: MessageProps) {
 
     return <div>
         <ContextMenu.Root>
-            <ContextMenu.Trigger className='text-zinc-300 py-0.5 relative w-full'>
+            <ContextMenu.Trigger
+                disabled={optimistic}
+                className={`${optimistic ? 'text-zinc-500' : 'text-zinc-300'} py-0.5 relative w-full`}
+            >
                 {isEditing
                     ?
                     <div className="">
