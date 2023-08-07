@@ -17,6 +17,7 @@ export const AuthContext = createContext<AuthContextInterface>({authUser: null, 
 export default function MyApp({ Component, pageProps: {...pageProps} }: AppProps) {
     const [authUser, setAuthUser] = useState<AuthUser|null>(null)
     console.log({authUser})
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (
         <AuthContext.Provider value={{authUser, setAuthUser}}>
             <Component {...pageProps} />
