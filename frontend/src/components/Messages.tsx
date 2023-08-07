@@ -9,7 +9,7 @@ const NEW_GROUP_TIME_DELTA_THRESHOLD = 6 * 60 * 1000
 
 interface MessagesProps {
     messages: Message[]
-    className: string
+    className?: string
     deleteMessage: (messageId: string) => void
     editMessage: (messageId: string, editedMessage: string) => void
 }
