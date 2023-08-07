@@ -1,5 +1,5 @@
 # Dancord
-
+[![Frontend CI](https://github.com/ddannyll/dancord/actions/workflows/frontend.node.js.yml/badge.svg?branch=main)](https://github.com/ddannyll/dancord/actions/workflows/frontend.node.js.yml)
 ## MVP Features
 
 - Authentication
