@@ -1,4 +1,4 @@
-import { Message, deleteMessageRequest, fetchChannelDetails, fetchChannelMessages, postMessageRequest } from '@/fetchers'
+import { Message, deleteMessageRequest, fetchChannelDetails, fetchChannelMessages, postMessageEditRequest, postMessageRequest } from '@/fetchers'
 import { v4 as uuidv4 } from 'uuid';
 import { useContext, useEffect, useState } from 'react'
 import useSWR from 'swr'
@@ -65,6 +65,18 @@ export default function useChannel({channelId, token}: ChannelIdToken) {
         })
     }
 
+    const editMessage = async (messageId: string, editedMessage: string) => {
+        await mutateMessages(async () => {
+            await postMessageEditRequest(token, messageId, editedMessage)
+            return []
+        },
+        {
+            rollbackOnError: true,
+            revalidate: true,
+        }
+        )
+    }
+
     useEffect(() => {
         if (initialMessages) {
             setMessages(initialMessages)
@@ -76,5 +88,6 @@ export default function useChannel({channelId, token}: ChannelIdToken) {
         channelName: channelDetails?.channelName,
         sendMessage,
         deleteMessage,
+        editMessage,
     }
 }

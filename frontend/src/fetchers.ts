@@ -131,3 +131,13 @@ export const deleteMessageRequest = async (token: string, messageId: string): Pr
     dummyMessages = dummyMessages.filter(message => message.messageId !== messageId)
     return true
 }
+
+export const postMessageEditRequest = async (token: string, messageId: string, messageString: string): Promise<Message> => {
+    await new Promise(resolve => setTimeout(resolve, 1000)) // delay for simulate network delay
+    const message = dummyMessages.find(message => message.messageId === messageId)
+    if (message) {
+        message.message = messageString
+        return message
+    }
+    throw new Error('Failed to edit message')
+}

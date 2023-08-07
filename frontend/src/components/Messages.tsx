@@ -10,9 +10,10 @@ interface MessagesProps {
     messages: Message[]
     className: string
     deleteMessage: (messageId: string) => void
+    editMessage: (messageId: string, editedMessage: string) => void
 }
 
-export default function Messages({messages, className, deleteMessage}: MessagesProps) {
+export default function Messages({messages, className, deleteMessage, editMessage}: MessagesProps) {
     const messageGroups: Message[][] = []
     // we need to group consecutive messages sent by the same user
     // so that we can append the sender's details at the top
@@ -38,6 +39,7 @@ export default function Messages({messages, className, deleteMessage}: MessagesP
                 .map(messageGroup =>
                     <MessageGroup
                         deleteMessage={deleteMessage}
+                        editMessage={editMessage}
                         key={messageGroup[0].messageId}
                         messageGroup={messageGroup}
                     />)
@@ -51,14 +53,16 @@ export default function Messages({messages, className, deleteMessage}: MessagesP
 interface MessageGroupProps {
     messageGroup: Message[]
     deleteMessage: (messageId: string) => void
+    editMessage: (messageId: string, editedMessage: string) => void
 }
-function MessageGroup({messageGroup, deleteMessage}: MessageGroupProps) {
+function MessageGroup({messageGroup, deleteMessage, editMessage}: MessageGroupProps) {
     const senderId = messageGroup[0].sentBy
     const messages = messageGroup.map(m =>
         <Message
             message={m.message}
             key={m.messageId}
             onDelete={() => deleteMessage(m.messageId)}
+            onEdit={(editedMessage: string) => editMessage(m.messageId, editedMessage)}
             optimistic={m.optimistic}
         />
     )
@@ -80,8 +84,8 @@ function MessageGroup({messageGroup, deleteMessage}: MessageGroupProps) {
 
 interface MessageProps {
     message: string
-    onEdit?: React.MouseEventHandler<HTMLElement>
-    onDelete?: React.MouseEventHandler<HTMLElement>
+    onEdit?: (editedMessage: string) => void
+    onDelete?: () => void
     optimistic?: boolean
 }
 function Message({message, onEdit, onDelete, optimistic}: MessageProps) {
@@ -101,6 +105,18 @@ function Message({message, onEdit, onDelete, optimistic}: MessageProps) {
         return () => clearTimeout(timeout)
     }, [isEditing])
 
+    const handleEditFormSubmit = (e: React.FormEvent) => {
+        e.preventDefault()
+        console.log('test')
+        interface formInterface extends HTMLElement {
+            editInput: HTMLInputElement
+        }
+        const form = e.currentTarget as formInterface
+        if (onEdit) {
+            onEdit(form.editInput.value)
+        }
+    }
+
     return <div>
         <ContextMenu.Root>
             <ContextMenu.Trigger
@@ -109,15 +125,31 @@ function Message({message, onEdit, onDelete, optimistic}: MessageProps) {
             >
                 {isEditing
                     ?
-                    <div className="">
-                        <input  type="text" className='w-full bg-zinc-600 p-2 rounded' defaultValue={message} ref={editInput}/>
+                    <form className="" onSubmit={handleEditFormSubmit}>
+                        <input
+                            id="editInput"
+                            type="text"
+                            className='w-full bg-zinc-600 p-2 rounded'
+                            defaultValue={message}
+                            ref={editInput}
+                            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                                if (e.code === 'Enter' && onEdit) {
+                                    e.preventDefault()
+                                    onEdit(e.currentTarget.value)
+                                    setIsEditing(false)
+                                }
+                            }}
+                        />
                         <div className="flex gap-3 text-xs underline text-violet-400">
-                            <button onClick={() => {setIsEditing(false)}}>cancel</button>
+                            <button onClick={(e: React.SyntheticEvent) => {
+                                e.preventDefault()
+                                setIsEditing(false)
+                            }}>cancel</button>
                             <button>save</button>
                         </div>
-                    </div>
+                    </form>
                     :
-                    <p>
+                    <p className='min-h-[1em]'>
                         {message}
                     </p>
                 }

@@ -10,7 +10,7 @@ export default function Channel() {
     const router = useRouter()
     const {authUser} = useContext(AuthContext)
     const channelId = router.query.channelId
-    const {messages, channelName, sendMessage, deleteMessage} = useChannel({channelId: channelId as string, token: authUser?.token || ''})
+    const {messages, channelName, sendMessage, deleteMessage, editMessage} = useChannel({channelId: channelId as string, token: authUser?.token || ''})
 
     const handleInputKeyUp = async (e: React.KeyboardEvent) => {
         if (e.key !== 'Enter') {
@@ -30,6 +30,7 @@ export default function Channel() {
     return <Layout>
         <div className="flex flex-col w-full justify-between">
             <Messages
+                editMessage={editMessage}
                 deleteMessage={deleteMessage}
                 messages={messages}
                 className='grow px-6'
