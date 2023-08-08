@@ -8,29 +8,37 @@ import { useEffect, useRef, useState } from 'react';
 const NEW_GROUP_TIME_DELTA_THRESHOLD = 6 * 60 * 1000
 
 interface MessagesProps {
-    messages: Message[]
+    messages: MessageWithSenderDetails[]
     className?: string
     deleteMessage: (messageId: string) => void
     editMessage: (messageId: string, editedMessage: string) => void
 }
 
+export interface MessageWithSenderDetails extends Omit<Message, 'sentBy'> {
+    sentBy: {
+        senderId: string
+        displayName: string
+        profilePicture: string | null
+    }
+}
+
 export default function Messages({messages, className, deleteMessage, editMessage}: MessagesProps) {
-    const messageGroups: Message[][] = []
+    const messageGroups: MessageWithSenderDetails[][] = []
     // we need to group consecutive messages sent by the same user
     // so that we can append the sender's details at the top
-    let currentGroup: Message[] = []
+    let currentGroup: MessageWithSenderDetails[] = []
     let prevSender: null | string = null
     let prevTimeSent = new Date(0)
     for (let i = 0; i < messages.length; i++) {
         const currMessage = messages[i]
         const timeDeltaMs = currMessage.timeSent.getTime() - prevTimeSent.getTime()
-        if ((prevSender !== currMessage.sentBy || timeDeltaMs >= NEW_GROUP_TIME_DELTA_THRESHOLD)
+        if ((prevSender !== currMessage.sentBy.senderId || timeDeltaMs >= NEW_GROUP_TIME_DELTA_THRESHOLD)
             && currentGroup.length > 0) {
             messageGroups.push(currentGroup)
             currentGroup = []
         }
         currentGroup.push(currMessage)
-        prevSender = currMessage.sentBy
+        prevSender = currMessage.sentBy.senderId
         prevTimeSent = currMessage.timeSent
     }
     if (currentGroup.length > 0) {
@@ -56,12 +64,12 @@ export default function Messages({messages, className, deleteMessage, editMessag
 
 
 interface MessageGroupProps {
-    messageGroup: Message[]
+    messageGroup: MessageWithSenderDetails[]
     deleteMessage: (messageId: string) => void
     editMessage: (messageId: string, editedMessage: string) => void
 }
 function MessageGroup({messageGroup, deleteMessage, editMessage}: MessageGroupProps) {
-    const senderId = messageGroup[0].sentBy
+    const senderName = messageGroup[0].sentBy.displayName
     const messages = messageGroup.map(m =>
         <Message
             message={m.message}
@@ -79,7 +87,7 @@ function MessageGroup({messageGroup, deleteMessage, editMessage}: MessageGroupPr
         </div>
         <div className="grow">
             <div className="flex gap-2 items-end">
-                <h2 className='text-zinc-50 font-medium'>{senderId} [change to name]</h2>
+                <h2 className='text-zinc-50 font-medium'>{senderName}</h2>
                 <h3 className='text-zinc-400 text-sm'>{formatDate(messageGroup[0].timeSent)}</h3>
             </div>
             {messages}

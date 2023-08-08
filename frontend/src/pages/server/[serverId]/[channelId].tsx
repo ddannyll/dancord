@@ -1,9 +1,10 @@
 import Layout from '@/components/Layout';
-import Messages from '@/components/Messages';
+import Messages, { MessageWithSenderDetails } from '@/components/Messages';
+import { attachMessageSenderInfo } from '@/helpers';
 import useChannel from '@/hooks/useChannel';
 import { AuthContext } from '@/pages/_app';
 import { useRouter } from 'next/router';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 export default function Channel() {
@@ -12,6 +13,17 @@ export default function Channel() {
     const channelId = router.query.channelId
     const {messages, channelName, sendMessage, deleteMessage, editMessage} = useChannel({channelId: channelId as string, token: authUser?.token || ''})
 
+    // TODO: put this shit in its own hook
+    const [messagesWithSenderInfo, setMessagesWithSenderInfo] = useState<MessageWithSenderDetails[]>([])
+    useEffect(() => {
+        const attachInfo = async () => {
+            const withInfo = await Promise.all(messages.map(message => attachMessageSenderInfo(authUser?.token || '', message)))
+            setMessagesWithSenderInfo(withInfo)
+        }
+        attachInfo()
+    }, [messages, authUser])
+
+    // TODO: if we use a form we dont need to do all this
     const handleInputKeyUp = async (e: React.KeyboardEvent) => {
         if (e.key !== 'Enter') {
             return
@@ -32,7 +44,7 @@ export default function Channel() {
             <Messages
                 editMessage={editMessage}
                 deleteMessage={deleteMessage}
-                messages={messages}
+                messages={messagesWithSenderInfo}
                 className='grow px-6'
             />
             <input

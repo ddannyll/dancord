@@ -28,6 +28,11 @@ export interface ChannelDetails {
     channelName: string
 }
 
+export interface UserDetails {
+    username: string
+    image: string | null
+}
+
 export const fetchAllServers: Fetcher<ServerDetails[], string> = async (token) => {
     // TODO: replace stub code with backend request
     await new Promise(resolve => setTimeout(resolve, 1000)) // delay for simulate network delay
@@ -140,4 +145,12 @@ export const postMessageEditRequest = async (token: string, messageId: string, m
         return message
     }
     throw new Error('Failed to edit message')
+}
+
+export const getUserDetails = async (token: string, userId: string): Promise<UserDetails> => {
+    await new Promise(resolve => setTimeout(resolve, 1000)) // delay for simulate network delay
+    return {
+        username: userId + 'name',
+        image: null,
+    }
 }
