@@ -100,6 +100,8 @@ let dummyMessages: Message[] = [
 ]
 
 export const fetchChannelMessages = async ({token, channelId}: {token: string, channelId:string}): Promise<Message[]> => {
+    console.log('revalidate')
+    console.log(dummyMessages)
     return dummyMessages
 }
 
@@ -125,7 +127,7 @@ export const postMessageRequest = async (token: string, channelId: string, messa
         reactions: [],
         timeSent: new Date(),
         lastEdited: null,
-        sentBy: 'danielwangid',
+        sentBy: message.includes('diff sender') ? uuidv4() : 'danielwangid',
     }
     dummyMessages.push(newMessage)
     return newMessage
@@ -140,6 +142,7 @@ export const deleteMessageRequest = async (token: string, messageId: string): Pr
 export const postMessageEditRequest = async (token: string, messageId: string, messageString: string): Promise<Message> => {
     await new Promise(resolve => setTimeout(resolve, 1000)) // delay for simulate network delay
     const message = dummyMessages.find(message => message.messageId === messageId)
+    console.log('post edit')
     if (message) {
         message.message = messageString
         return message

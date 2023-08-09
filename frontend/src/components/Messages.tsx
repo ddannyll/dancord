@@ -124,7 +124,7 @@ function Message({message, onEdit, onDelete, optimistic}: MessageProps) {
             editInput: HTMLInputElement
         }
         const form = e.currentTarget as formInterface
-        if (onEdit) {
+        if (onEdit && form.editInput) {
             onEdit(form.editInput.value)
         }
     }

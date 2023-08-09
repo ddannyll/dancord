@@ -35,6 +35,5 @@ export async function attachMessageSenderInfo(token: string, message: Message): 
             profilePicture: senderDetails.image,
         },
     }
-    console.log(messageWithSenderDetails)
     return messageWithSenderDetails
 }
