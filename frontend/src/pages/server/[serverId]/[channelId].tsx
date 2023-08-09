@@ -16,11 +16,9 @@ export default function Channel() {
     // TODO: put this shit in its own hook
     const [messagesWithSenderInfo, setMessagesWithSenderInfo] = useState<MessageWithSenderDetails[]>([])
     useEffect(() => {
-        console.log('messages effect')
         const attachInfo = async () => {
             const withInfo = await Promise.all(messages.map(message => attachMessageSenderInfo(authUser?.token || '', message)))
             setMessagesWithSenderInfo(withInfo)
-            console.log({withInfo})
         }
         attachInfo()
     }, [messages, authUser])

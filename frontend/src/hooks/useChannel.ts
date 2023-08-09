@@ -74,7 +74,6 @@ export default function useChannel({channelId, token}: ChannelIdToken) {
     useEffect(() => {
         if (initialMessages) {
             setMessages([...initialMessages])
-            console.log('set messages')
         }
     }, [initialMessages])
 

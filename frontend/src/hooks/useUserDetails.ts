@@ -13,6 +13,5 @@ export default function useUserDetails({userId, token}: useUserDetailsProps) {
         [getUserDetails, token, userId],
         applyFn<Parameters<typeof getUserDetails>, ReturnType<typeof getUserDetails>>
     )
-    console.log(data)
     return data
 }
