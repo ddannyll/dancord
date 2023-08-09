@@ -32,11 +32,12 @@ describe('Messages', () => {
     })
 
     it('delete message', async () => {
+        const editFn = jest.fn()
         const deleteFn = jest.fn()
         render(
             <Messages
                 messages={mockMessages}
-                editMessage={() => ({})}
+                editMessage={editFn}
                 deleteMessage={deleteFn}
             />
         )
