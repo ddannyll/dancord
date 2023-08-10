@@ -16,7 +16,6 @@ export default function Register() {
         formState: {errors},
     } = useForm<LoginInputs>({reValidateMode: 'onChange'})
     const onSubmit: SubmitHandler<LoginInputs> = data => {
-        console.log(data)
         router.push('/login')
     }
     const labelClasses = 'text-zinc-400 font-bold text-sm mt-2 flex'

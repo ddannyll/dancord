@@ -3,12 +3,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { useContext, useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { AuthContext } from '@/pages/_app';
+import { applyFn } from '@/helpers';
 
-
-
-function applyFn<Input, Output>([fn, input]: [fn: (arg0: Input) => Output, input: Input]) {
-    return fn(input)
-}
 
 interface ChannelIdToken {
     channelId: string
@@ -77,7 +73,7 @@ export default function useChannel({channelId, token}: ChannelIdToken) {
 
     useEffect(() => {
         if (initialMessages) {
-            setMessages(initialMessages)
+            setMessages([...initialMessages])
         }
     }, [initialMessages])
 
