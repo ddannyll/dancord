@@ -120,12 +120,8 @@ function Message({message, onEdit, onDelete, optimistic}: MessageProps) {
 
     const handleEditFormSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        interface formInterface extends HTMLElement {
-            editInput: HTMLInputElement
-        }
-        const form = e.currentTarget as formInterface
-        if (onEdit && form.editInput) {
-            onEdit(form.editInput.value)
+        if (onEdit && editInput.current) {
+            onEdit(editInput.current.value)
         }
     }
 
