@@ -67,6 +67,11 @@ describe('Messages', () => {
         expect(screen.getByText(/Yesterday at.*/i))
     })
 
+    it.skip('Group Tests', () => {
+        // TODO: create group tests
+        expect(false).toBeTruthy
+    })
+
     it('edit + delete message', async () => {
         const user = userEvent.setup()
         const editFn = jest.fn()
