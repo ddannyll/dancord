@@ -81,9 +81,9 @@ function MessageGroup({messageGroup, deleteMessage, editMessage}: MessageGroupPr
     )
 
     return <div className='flex mb-4'>
-        <div className="mr-4 mt-1 w-[40px] h-[40px] rounded-full border overflow-hidden">
+        <div className="mr-4 mt-1 w-[40px] h-[40px] rounded-full bg-zinc-800 overflow-hidden flex items-center justify-center">
             {/*  TODO: GET THE CORRECT PROFILE PHOTO */}
-            <FontAwesomeIcon icon={faUser} className="text-white w-full h-full" />
+            <FontAwesomeIcon icon={faUser} className="text-zinc-50 w-[50%] h-[50%] pl-[1px]" />
         </div>
         <div className="grow">
             <div className="flex gap-2 items-end">
