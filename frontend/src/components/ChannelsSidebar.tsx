@@ -1,10 +1,11 @@
-import {  faHashtag } from '@fortawesome/free-solid-svg-icons'
+import {  faChevronDown, faHashtag, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { faSquarePlus } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
 import { useState } from 'react'
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import * as Dialog from '@radix-ui/react-dialog';
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import useConfirm from '@/hooks/useConfirm'
 
 interface ChannelsSidebarProps {
@@ -14,8 +15,38 @@ interface ChannelsSidebarProps {
 }
 
 export default function ChannelsSidebar({server, channels, selectedChannel}: ChannelsSidebarProps) {
+    const [dropdownOpen, setDropdownOpen] = useState(false)
+
     return <div className="w-52 h-full bg-zinc-800 shrink-0">
-        <h1 className="text-zinc-50 p-4 mb-4 shadow-md">{server.serverName}</h1>
+        {/* Server Name */}
+        <DropdownMenu.Root onOpenChange={() => setDropdownOpen(!dropdownOpen)}>
+            <DropdownMenu.Trigger className='w-full'>
+                <div className="flex mb-4 shadow-md text-zinc-50 w-full justify-between items-center transition hover:bg-zinc-700">
+                    <h1 className="p-4">
+                        {server.serverName}
+                    </h1>
+                    <FontAwesomeIcon icon={dropdownOpen ? faXmark : faChevronDown} className='pr-4 pl-2'/>
+                </div>
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Portal>
+                <DropdownMenu.Content
+                    className='-mt-2 p-2 rounded bg-zinc-900 text-zinc-300 text-sm flex flex-col gap-1'
+                >
+                    <DropdownMenu.Item className='py-1 px-3 rounded-sm hover:bg-violet-500 hover:text-zinc-50'>
+                        <button className='w-full text-left'>
+                            Edit Server Name
+                        </button>
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Item className='py-1 px-3 rounded-sm hover:bg-violet-500 hover:text-zinc-50'>
+                        <button className='w-full text-left'>
+                            Create Invite
+                        </button>
+                    </DropdownMenu.Item>
+                </DropdownMenu.Content>
+            </DropdownMenu.Portal>
+        </DropdownMenu.Root>
+
+        {/* Channel */}
         <ul className='flex flex-col gap-y-2 text-zinc-500 font-medium'>
             {channels.map(channel => <ChannelListing
                 key={channel.channelId}
