@@ -7,6 +7,7 @@ import * as ContextMenu from '@radix-ui/react-context-menu';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import useConfirm from '@/hooks/useConfirm'
+import EditModal from './EditModal'
 
 interface ChannelsSidebarProps {
     server: {serverName: string, serverId: string}
@@ -16,6 +17,7 @@ interface ChannelsSidebarProps {
 
 export default function ChannelsSidebar({server, channels, selectedChannel}: ChannelsSidebarProps) {
     const [dropdownOpen, setDropdownOpen] = useState(false)
+    const [editingServer, setEditingServer] = useState(false)
 
     return <div className="w-52 h-full bg-zinc-800 shrink-0">
         {/* Server Name */}
@@ -32,19 +34,24 @@ export default function ChannelsSidebar({server, channels, selectedChannel}: Cha
                 <DropdownMenu.Content
                     className='-mt-2 p-2 rounded bg-zinc-900 text-zinc-300 text-sm flex flex-col gap-1'
                 >
-                    <DropdownMenu.Item className='py-1 px-3 rounded-sm hover:bg-violet-500 hover:text-zinc-50'>
-                        <button className='w-full text-left'>
-                            Edit Server Name
-                        </button>
+                    <DropdownMenu.Item
+                        onClick={() => setEditingServer(true)}
+                        className='py-1 px-3 rounded-sm hover:cursor-pointer hover:bg-violet-500 hover:text-zinc-50'>
+                        Edit Server Name
                     </DropdownMenu.Item>
-                    <DropdownMenu.Item className='py-1 px-3 rounded-sm hover:bg-violet-500 hover:text-zinc-50'>
-                        <button className='w-full text-left'>
-                            Create Invite
-                        </button>
+                    <DropdownMenu.Item className='py-1 px-3 rounded-sm hover:cursor-pointer hover:bg-violet-500 hover:text-zinc-50'>
+                        Create Invite
                     </DropdownMenu.Item>
                 </DropdownMenu.Content>
             </DropdownMenu.Portal>
         </DropdownMenu.Root>
+        <EditModal
+            open={editingServer}
+            onOpenChange={open => setEditingServer(open)}
+            title={`Editing ${server.serverName}`}
+            onSave={() => setEditingServer(false)}
+            onCancel={() => setEditingServer(false)}
+        />
 
         {/* Channel */}
         <ul className='flex flex-col gap-y-2 text-zinc-500 font-medium'>
@@ -123,35 +130,13 @@ function ChannelListing({channelName, href, highlighted, deleteChannel, editChan
                 </ContextMenu.Content>
             </ContextMenu.Portal>
         </ContextMenu.Root>
-        <Dialog.Root open={isEditing} onOpenChange={(open) => setIsEditing(open)}>
-            <Dialog.Portal>
-                <Dialog.Overlay
-                    className='absolute left-0 top-0 w-screen h-screen bg-zinc-900/70 flex items-center justify-center'/>
-                <Dialog.Content
-                    className='absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 max-w-lg w-screen
-                        bg-zinc-700 text-zinc-50 p-5 rounded drop-shadow-md'
-                >
-                    <Dialog.Title className='text-xl'>
-                        {`Editing ${channelName}`}
-                    </Dialog.Title>
-                    <div className="mt-4 grid gap-2 grid-cols-2 md:grid-cols-[3fr_1fr_1fr]">
-                        <input
-                            defaultValue={channelName}
-                            className='p-2 w-full bg-zinc-600 focus:outline-none grid-row col-span-2 md:col-span-1'
-                        />
-                        <button
-                            onClick={() => setIsEditing(false)}
-                            className='bg-red-400 py-2 px-4 transition-colors hover:bg-red-500 active:bg-red-600'>
-                            Cancel
-                        </button>
-                        <button
-                            onClick={() => setIsEditing(false)}
-                            className='bg-violet-500 py-2 px-4 transition-colors hover:bg-violet-600 active:bg-violet-700'>
-                            Save
-                        </button>
-                    </div>
-                </Dialog.Content>
-            </Dialog.Portal>
-        </Dialog.Root>
+        <EditModal
+            open={isEditing}
+            onOpenChange={(open) => setIsEditing(open)}
+            onCancel={() => setIsEditing(false)}
+            onSave={() => setIsEditing(false)}
+            title={`Editing ${channelName}`}
+            defaultValue={channelName}
+        />
     </>
 }
