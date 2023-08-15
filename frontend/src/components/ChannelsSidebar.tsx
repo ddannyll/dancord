@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
 import { useState } from 'react'
 import * as ContextMenu from '@radix-ui/react-context-menu';
-import * as Dialog from '@radix-ui/react-dialog';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import useConfirm from '@/hooks/useConfirm'
 import EditModal from './EditModal'
@@ -51,6 +50,7 @@ export default function ChannelsSidebar({server, channels, selectedChannel}: Cha
             title={`Editing ${server.serverName}`}
             onSave={() => setEditingServer(false)}
             onCancel={() => setEditingServer(false)}
+            defaultValue={server.serverName}
         />
 
         {/* Channel */}

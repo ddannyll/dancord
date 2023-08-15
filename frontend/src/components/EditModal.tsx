@@ -1,4 +1,5 @@
 import * as Dialog from '@radix-ui/react-dialog';
+import { fireEvent } from '@testing-library/react';
 
 interface EditModelProps {
     open: boolean
@@ -34,6 +35,13 @@ export default function EditModal({onCancel, onSave, defaultValue, title, open, 
                     onSubmit={handleSubmit}
                     className="mt-4 grid gap-2 grid-cols-2 md:grid-cols-[3fr_1fr_1fr]">
                     <input
+                        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                            if (e.key == 'Enter') {
+                                e.preventDefault()
+                                onSave(e.currentTarget.value)
+                            }
+                        }}
+                        spellCheck={false}
                         id="editInput"
                         defaultValue={defaultValue}
                         className='p-2 w-full bg-zinc-600 focus:outline-none grid-row col-span-2 md:col-span-1'
