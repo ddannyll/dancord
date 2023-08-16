@@ -1,9 +1,9 @@
 import { Message, deleteMessageRequest, fetchChannelDetails, fetchChannelMessages, postMessageEditRequest, postMessageRequest } from '@/fetchers'
 import { v4 as uuidv4 } from 'uuid';
-import { useContext, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { AuthContext } from '@/pages/_app';
-import { applyFn } from '@/helpers';
+import { applyFn, compareMessageByDate } from '@/helpers';
 
 
 interface ChannelIdToken {
@@ -15,8 +15,7 @@ export default function useChannel({channelId, token}: ChannelIdToken) {
     const [messages, setMessages] = useState<Message[]>([])
     const {authUser} = useContext(AuthContext)
 
-
-    const {data: initialMessages, mutate: mutateMessages} = useSWR(
+    const {data: initialMessages} = useSWR(
         [fetchChannelMessages, {channelId, token}],
         applyFn<Parameters<typeof fetchChannelMessages>[0], ReturnType<typeof fetchChannelMessages>>
     )
@@ -26,49 +25,57 @@ export default function useChannel({channelId, token}: ChannelIdToken) {
     )
 
     const sendMessage = async (messageText: string) => {
-        const newMessage: Message = {
+        const tmpId = 'tmp-' + uuidv4()
+        const optimisticMessage: Message = {
             message: messageText,
-            messageId: 'tmp ' + uuidv4(),
+            messageId: tmpId,
             reactions: [],
             timeSent: new Date(),
             lastEdited: null,
             sentBy: authUser?.user as string,
             optimistic: true,
         }
-        await mutateMessages(async () => {
-            const newMessage = await postMessageRequest(token, channelId, messageText)
-            return [...messages, newMessage]
-        },
-        {
-            optimisticData: [...messages, newMessage],
-            rollbackOnError: true,
-            revalidate: true,
-        })
+        setMessages(messages => [...messages, optimisticMessage])
+        try {
+            const actualMessage = await postMessageRequest(authUser?.token || '', channelId, messageText)
+            setMessages(messages =>
+                [
+                    ...messages.filter(m => m.messageId !== tmpId),
+                    actualMessage,
+                ].sort(compareMessageByDate)
+            )
+        } catch {
+            setMessages(messages => messages.filter(m => m.messageId !== tmpId))
+            throw new Error('Failed to send message') // TODO: maybe do proper error message propogation
+        }
+
     }
 
     const deleteMessage = async (messageId: string) => {
-        const newMessages = messages.filter(message => message.messageId !== messageId)
-        await mutateMessages(async () => {
-            await deleteMessageRequest(token, messageId)
-            return []
-        },
-        {
-            optimisticData: [...newMessages],
-            rollbackOnError: true,
-            revalidate: true,
-        })
+        if (messages.find(m => m.messageId === messageId) === undefined) {
+            throw new Error('Invalid messageId to delete')
+        }
+        // maybe TODO: optimistic UI for message deletion
+        const success = await deleteMessageRequest(token, messageId)
+        if (!success) {
+            throw new Error('Failed to delete message')
+        }
+        setMessages(messages => messages.filter(m => m.messageId !== messageId))
     }
 
     const editMessage = async (messageId: string, editedMessage: string) => {
-        await mutateMessages(async () => {
-            await postMessageEditRequest(token, messageId, editedMessage)
-            return []
-        },
-        {
-            rollbackOnError: true,
-            revalidate: true,
+        if (messages.find(m => m.messageId === messageId) === undefined) {
+            throw new Error('Invalid messageId to edit')
         }
-        )
+        try {
+            const newMessage = await postMessageEditRequest(token, messageId, editedMessage)
+            setMessages(messages => [
+                ...messages.filter(m => m.messageId !== messageId),
+                newMessage,
+            ].sort(compareMessageByDate))
+        } catch {
+            throw new Error('Failed to edit message')
+        }
     }
 
     useEffect(() => {
@@ -76,6 +83,7 @@ export default function useChannel({channelId, token}: ChannelIdToken) {
             setMessages([...initialMessages])
         }
     }, [initialMessages])
+
 
     return {
         messages,

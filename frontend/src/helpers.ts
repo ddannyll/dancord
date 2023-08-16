@@ -37,3 +37,7 @@ export async function attachMessageSenderInfo(token: string, message: Message): 
     }
     return messageWithSenderDetails
 }
+
+export function compareMessageByDate(m1: Message | MessageWithSenderDetails, m2: Message | MessageWithSenderDetails) {
+    return m1.timeSent.getTime() - m2.timeSent.getTime()
+}
