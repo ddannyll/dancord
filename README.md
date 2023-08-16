@@ -27,7 +27,7 @@
 - Users can update profile
   - Profile Statuses
 
-> :warning: **API DOCS OUTDATED (since the backend is going to be rewritten using Go)!
+> :warning: **API DOCS OUTDATED** (since the backend is going to be rewritten using Go)!
 
 ## Data Types 
 
