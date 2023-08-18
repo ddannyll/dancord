@@ -34,6 +34,7 @@ func newFiberServer(
 	userHandler *handlers.UserHandler, 
 	pingHandler *handlers.PingHandler,
 	authMiddleware *handlers.AuthMiddleware,
+	config config.EnvVars,
 ) {
 	app := fiber.New(fiber.Config{
 		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
@@ -70,8 +71,8 @@ func newFiberServer(
 
 	lc.Append(fx.Hook{
 		OnStart: func (ctx context.Context) error {
-			fmt.Println("Starting fiber server on port 8080")
-			go app.Listen(":8080")
+			fmt.Printf("Starting Fiber - %s:%s\n", config.LISTEN_ON, config.PORT)
+			go app.Listen(fmt.Sprintf("%s:%s", config.LISTEN_ON, config.PORT))
 			return nil
 		},
 		OnStop: func (ctx context.Context) error {

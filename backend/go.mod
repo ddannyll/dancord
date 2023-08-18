@@ -2,8 +2,6 @@ module github.com/ddannyll/dancord/backend
 
 go 1.21
 
-toolchain go1.21.0
-
 require (
 	github.com/go-playground/validator/v10 v10.15.1
 	github.com/go-sql-driver/mysql v1.7.1
