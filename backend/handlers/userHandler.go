@@ -69,7 +69,7 @@ func (u *UserHandler) SignUpUser(c *fiber.Ctx) error {
 //	@Param		SignInBody	body	userCredentialsBody	true	"Password must be atleast 6 characters."
 //	@Produce	json
 //	@Success	200	{object}	userSigninSuccessResponse
-//	@Failure	400	"Invalid Credentials"
+//	@Failure	401	"Invalid Credentials"
 //	@Router		/user/signin [post]
 func (u *UserHandler) SignInUser(c * fiber.Ctx) error {
 	var user userCredentialsBody
