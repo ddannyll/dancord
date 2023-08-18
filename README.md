@@ -30,8 +30,9 @@
 ## Database Schema
 ![DANCORD](https://github.com/ddannyll/dancord/assets/80935652/69230ca9-42db-453e-9dce-7ce3b5bfe7ca)
 
+> ✔️ [**NEW API DOCS**(WIP)](https://dancord-production.up.railway.app/swagger/index.html)
 
-> :warning: **API DOCS OUTDATED** (since the backend is going to be rewritten using Go)!
+> :warning: **API DOCS BELOW OUTDATED** (since the backend is going to be rewritten using Go)!
 
 ## Data Types 
 
