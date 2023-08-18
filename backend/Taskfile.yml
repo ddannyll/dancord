@@ -1,0 +1,10 @@
+version: "3"
+
+tasks:
+  default:
+    cmds:
+      - air
+  docs:
+    cmds:
+      - swag fmt
+      - swag init --dir ./,./handlers

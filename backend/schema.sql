@@ -1,6 +1,6 @@
 CREATE TABLE `Users` (
   `id` integer PRIMARY KEY AUTO_INCREMENT,
-  `username` varchar(255),
+  `username` varchar(255) UNIQUE,
   `hashed_password` varchar(255)
 );
 

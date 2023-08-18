@@ -1,9 +1,9 @@
 package handlers
 
 import (
+	"github.com/ddannyll/dancord/backend/storage"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
-	"www.github.com/ddannyll/dancord/backend/storage"
 )
 
 type UserHandler struct {
@@ -17,12 +17,20 @@ func NewUserHandler(storage *storage.UserStorage) *UserHandler {
 type userSignupBody struct {
 	Username string `json:"username" validate:"required"`
 	Password string `json:"password" validate:"required,min=6"`
-}
+}//@name SignUpBody
 
 type userSignupSuccessResponse struct {
 	Id int `json:"id"`
 }
 
+// SignUp godoc
+//	@Summary	Sign a user up to dancord
+//	@Tags		user
+//	@Accept		json
+//	@Param		userInfo	body	userSignupBody	true	"Password must be atleast 6 characters."
+//	@Produce	json
+//	@Success	200	{object}	userSignupSuccessResponse
+//	@Router		/user/signup [get]
 func (u *UserHandler) SignUpUser(c *fiber.Ctx) error {
 	var user userSignupBody
 	if err := c.BodyParser(&user); err != nil {

@@ -1,0 +1,65 @@
+definitions:
+  SignUpBody:
+    properties:
+      password:
+        minLength: 6
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  handlers.userSignupSuccessResponse:
+    properties:
+      id:
+        type: integer
+    type: object
+info:
+  contact: {}
+  description: Backend API sepcifications for dancord
+  title: dancord API
+  version: "0.1"
+paths:
+  /ping:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Ping the server
+      tags:
+      - ping
+  /user/signup:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: username and password to sign up with
+        in: body
+        name: userInfo
+        required: true
+        schema:
+          $ref: '#/definitions/SignUpBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.userSignupSuccessResponse'
+      summary: Sign a user up to dancord
+      tags:
+      - user
+securityDefinitions:
+  ApiKeyAuth:
+    description: Token in Bearer format to authenticate the user
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

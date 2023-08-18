@@ -1,9 +1,9 @@
 package db
 
 import (
+	"github.com/ddannyll/dancord/backend/config"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
-	"www.github.com/ddannyll/dancord/backend/config"
 )
 
 func CreateMySQLConnection(env config.EnvVars) *sqlx.DB {
