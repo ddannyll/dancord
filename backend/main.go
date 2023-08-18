@@ -19,15 +19,9 @@ import (
 	"go.uber.org/fx"
 )
 
-//	@title						dancord API
-//	@version					0.1
-//	@description				Backend API sepcifications for dancord
-//	@securityDefinitions.apikey	ApiKeyAuth
-//	@in							header
-//	@name						Authorization
-//	@description				Token in Bearer format to authenticate the user
-//	@host						localhost:8080
-//	@BasePath					/
+//	@title			dancord API
+//	@version		0.1
+//	@description	Backend API sepcifications for dancord
 func newFiberServer(
 	lc fx.Lifecycle, 
 	db *sqlx.DB, 

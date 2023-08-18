@@ -55,9 +55,19 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/UserSigninResponse'
-        "400":
+        "401":
           description: Invalid Credentials
       summary: Sign a user into dancord
+      tags:
+      - user
+  /user/signout:
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: on successful signout
+      summary: Sign a user out of dancord
       tags:
       - user
   /user/signup:
@@ -82,10 +92,4 @@ paths:
       summary: Sign a user up to dancord
       tags:
       - user
-securityDefinitions:
-  ApiKeyAuth:
-    description: Token in Bearer format to authenticate the user
-    in: header
-    name: Authorization
-    type: apiKey
 swagger: "2.0"

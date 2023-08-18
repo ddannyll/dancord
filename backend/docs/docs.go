@@ -68,8 +68,24 @@ const docTemplate = `{
                             "$ref": "#/definitions/UserSigninResponse"
                         }
                     },
-                    "400": {
+                    "401": {
                         "description": "Invalid Credentials"
+                    }
+                }
+            }
+        },
+        "/user/signout": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Sign a user out of dancord",
+                "responses": {
+                    "200": {
+                        "description": "on successful signout"
                     }
                 }
             }
@@ -135,14 +151,6 @@ const docTemplate = `{
                     "type": "integer"
                 }
             }
-        }
-    },
-    "securityDefinitions": {
-        "ApiKeyAuth": {
-            "description": "Token in Bearer format to authenticate the user",
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header"
         }
     }
 }`
