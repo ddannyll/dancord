@@ -2,9 +2,11 @@ definitions:
   SignUpBody:
     properties:
       password:
+        example: daniel321
         minLength: 6
         type: string
       username:
+        example: daniel
         type: string
     required:
     - password

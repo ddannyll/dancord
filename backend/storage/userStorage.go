@@ -1,6 +1,11 @@
 package storage
 
-import "github.com/jmoiron/sqlx"
+import (
+	"net/http"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/jmoiron/sqlx"
+)
 
 type UserStorage struct {
 	Conn *sqlx.DB
@@ -21,7 +26,7 @@ func (s *UserStorage) CreateNewUser(user User) (int, error) {
 		user.Username, user.HashedPassword,
 	)
 	if err != nil {
-		return 0, err
+		return 0, fiber.NewError(http.StatusBadRequest, "failed to insert user into database")
 	}
 	id, err := res.LastInsertId()
 	if err != nil {

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/ddannyll/dancord/backend/config"
@@ -32,15 +33,36 @@ func newFiberServer(
 	db *sqlx.DB, 
 	userHandler *handlers.UserHandler, 
 	pingHandler *handlers.PingHandler,
+	authMiddleware *handlers.AuthMiddleware,
 ) {
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
+			ctx.Set(fiber.HeaderContentType, fiber.MIMETextPlainCharsetUTF8)
+			// Overwrite the default error handler since we don't want to
+			// send potentially sensitive information in the event of 
+			// unexpected errors
+
+			// If a handled error (one that is passed as *fiber.Error)
+			// we just send that back normally
+			var e *fiber.Error
+			if errors.As(err, &e) {
+				return ctx.Status(e.Code).SendString(e.Error())
+			}
+
+			// Otherwise send Internal Server Error
+			return ctx.Status(fiber.StatusInternalServerError).SendString("Internal Server Error")
+		},
+	})
+
+	// Middleware
 	app.Use(cors.New())
 	app.Use(logger.New())
 
+	// Docs
 	app.Get("/swagger/*", swagger.HandlerDefault)
 
-
-	app.Get("/ping", pingHandler.Ping)
+	// API Routes
+	app.Get("/ping", authMiddleware.AuthenticateRoute, pingHandler.Ping)
 	userGroup := app.Group("/user")
 	userGroup.Post("/signup", userHandler.SignUpUser)
 
@@ -63,8 +85,10 @@ func main() {
 			config.LoadEnv,
 			db.CreateMySQLConnection,
 			storage.NewUserStorage,
+			storage.NewSessionStorage,
 			handlers.NewUserHandler,
 			handlers.NewPingHandler,
+			handlers.NewAuthMiddleware,
 		),
 		fx.Invoke(newFiberServer),
 	).Run()

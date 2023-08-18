@@ -83,10 +83,12 @@ const docTemplate = `{
             "properties": {
                 "password": {
                     "type": "string",
-                    "minLength": 6
+                    "minLength": 6,
+                    "example": "daniel321"
                 },
                 "username": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "daniel"
                 }
             }
         },
