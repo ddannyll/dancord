@@ -21,16 +21,17 @@ type userSignupBody struct {
 
 type userSignupSuccessResponse struct {
 	Id int `json:"id"`
-}
+}//@name SignUpResponse
 
 // SignUp godoc
-//	@Summary	Sign a user up to dancord
-//	@Tags		user
-//	@Accept		json
-//	@Param		userInfo	body	userSignupBody	true	"Password must be atleast 6 characters."
-//	@Produce	json
-//	@Success	200	{object}	userSignupSuccessResponse
-//	@Router		/user/signup [get]
+//	@Summary		Sign a user up to dancord
+//	@description	Insert description here
+//	@Tags			user
+//	@Accept			json
+//	@Param			SignUpBody	body	userSignupBody	true	"Password must be atleast 6 characters."
+//	@Produce		json
+//	@Success		200	{object}	userSignupSuccessResponse
+//	@Router			/user/signup [post]
 func (u *UserHandler) SignUpUser(c *fiber.Ctx) error {
 	var user userSignupBody
 	if err := c.BodyParser(&user); err != nil {

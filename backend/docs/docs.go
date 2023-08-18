@@ -39,7 +39,8 @@ const docTemplate = `{
             }
         },
         "/user/signup": {
-            "get": {
+            "post": {
+                "description": "Insert description here",
                 "consumes": [
                     "application/json"
                 ],
@@ -52,8 +53,8 @@ const docTemplate = `{
                 "summary": "Sign a user up to dancord",
                 "parameters": [
                     {
-                        "description": "username and password to sign up with",
-                        "name": "userInfo",
+                        "description": "Password must be atleast 6 characters.",
+                        "name": "SignUpBody",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -65,7 +66,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handlers.userSignupSuccessResponse"
+                            "$ref": "#/definitions/SignUpResponse"
                         }
                     }
                 }
@@ -89,7 +90,7 @@ const docTemplate = `{
                 }
             }
         },
-        "handlers.userSignupSuccessResponse": {
+        "SignUpResponse": {
             "type": "object",
             "properties": {
                 "id": {
