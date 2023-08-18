@@ -67,6 +67,8 @@ func newFiberServer(
 	userGroup := app.Group("/user")
 	userGroup.Post("/signup", userHandler.SignUpUser)
 	userGroup.Post("/signin", userHandler.SignInUser)
+	userGroup.Post("/signout", userHandler.SignOutUser)
+
 
 
 	lc.Append(fx.Hook{

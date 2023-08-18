@@ -71,7 +71,7 @@ func (u *UserHandler) SignUpUser(c *fiber.Ctx) error {
 //	@Success	200	{object}	userSigninSuccessResponse
 //	@Failure	401	"Invalid Credentials"
 //	@Router		/user/signin [post]
-func (u *UserHandler) SignInUser(c * fiber.Ctx) error {
+func (u *UserHandler) SignInUser(c *fiber.Ctx) error {
 	var user userCredentialsBody
 	if err := parseAndValidateBody(c, &user); err != nil {
 		return err
@@ -91,9 +91,34 @@ func (u *UserHandler) SignInUser(c * fiber.Ctx) error {
 	}
 	sess.Set("auth", true)
 	sess.Set("user_id", userFromStorage.Id)
-	sess.Save()
+	if err := sess.Save(); err != nil {
+		return err
+	}
 
 	return c.JSON(userSigninSuccessResponse{
 		Id: userFromStorage.Id,
+	})
+}
+
+// Signin godoc
+//	@Summary	Sign a user out of dancord
+//	@description
+//	@Tags		user
+//	@Produce	json
+//	@Success	200	"on successful signout"
+//	@Router		/user/signout [post]
+func (u *UserHandler) SignOutUser(c *fiber.Ctx) error {
+	sess, err := u.SessionStore.Get(c)
+	if err != nil {
+		return err
+	}
+	if err := sess.Destroy(); err != nil {
+		return err
+	}
+	if err := sess.Save(); err != nil {
+		return err
+	}
+	return c.JSON(fiber.Map{
+		"success": true,
 	})
 }
