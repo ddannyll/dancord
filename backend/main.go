@@ -32,6 +32,7 @@ func newFiberServer(
 	db *sqlx.DB, 
 	userHandler *handlers.UserHandler, 
 	pingHandler *handlers.PingHandler,
+	config config.EnvVars,
 ) {
 	app := fiber.New()
 	app.Use(cors.New())
@@ -46,8 +47,8 @@ func newFiberServer(
 
 	lc.Append(fx.Hook{
 		OnStart: func (ctx context.Context) error {
-			fmt.Println("Starting fiber server on port 8080")
-			go app.Listen(":8080")
+			fmt.Printf("Starting Fiber - %s:%s\n", config.LISTEN_ON, config.PORT)
+			go app.Listen(fmt.Sprintf("%s:%s", config.LISTEN_ON, config.PORT))
 			return nil
 		},
 		OnStop: func (ctx context.Context) error {
