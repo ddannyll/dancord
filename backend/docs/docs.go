@@ -38,6 +38,42 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/signin": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Sign a user into dancord",
+                "parameters": [
+                    {
+                        "description": "Password must be atleast 6 characters.",
+                        "name": "SignInBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/UserCredentials"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/UserSigninResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Credentials"
+                    }
+                }
+            }
+        },
         "/user/signup": {
             "post": {
                 "description": "Insert description here",
@@ -58,7 +94,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/SignUpBody"
+                            "$ref": "#/definitions/UserCredentials"
                         }
                     }
                 ],
@@ -66,7 +102,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/SignUpResponse"
+                            "$ref": "#/definitions/UserSigninResponse"
                         }
                     }
                 }
@@ -74,7 +110,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "SignUpBody": {
+        "UserCredentials": {
             "type": "object",
             "required": [
                 "password",
@@ -92,7 +128,7 @@ const docTemplate = `{
                 }
             }
         },
-        "SignUpResponse": {
+        "UserSigninResponse": {
             "type": "object",
             "properties": {
                 "id": {

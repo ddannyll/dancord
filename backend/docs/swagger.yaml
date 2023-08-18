@@ -1,5 +1,5 @@
 definitions:
-  SignUpBody:
+  UserCredentials:
     properties:
       password:
         example: daniel321
@@ -12,7 +12,7 @@ definitions:
     - password
     - username
     type: object
-  SignUpResponse:
+  UserSigninResponse:
     properties:
       id:
         type: integer
@@ -37,6 +37,29 @@ paths:
       summary: Ping the server
       tags:
       - ping
+  /user/signin:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Password must be atleast 6 characters.
+        in: body
+        name: SignInBody
+        required: true
+        schema:
+          $ref: '#/definitions/UserCredentials'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/UserSigninResponse'
+        "400":
+          description: Invalid Credentials
+      summary: Sign a user into dancord
+      tags:
+      - user
   /user/signup:
     post:
       consumes:
@@ -48,14 +71,14 @@ paths:
         name: SignUpBody
         required: true
         schema:
-          $ref: '#/definitions/SignUpBody'
+          $ref: '#/definitions/UserCredentials'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/SignUpResponse'
+            $ref: '#/definitions/UserSigninResponse'
       summary: Sign a user up to dancord
       tags:
       - user

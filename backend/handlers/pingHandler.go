@@ -13,7 +13,7 @@ func NewPingHandler() *PingHandler {
 //	@Summary	Ping the server
 //	@Tags		ping
 //	@Accept		json
-//	@Produce	plain
+//	@Produce	plain 
 //	@Success	200	string	pong
 //	@Router		/ping [get]
 func (p *PingHandler) Ping(c *fiber.Ctx) error {

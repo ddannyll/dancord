@@ -65,6 +65,8 @@ func newFiberServer(
 	app.Get("/ping", authMiddleware.AuthenticateRoute, pingHandler.Ping)
 	userGroup := app.Group("/user")
 	userGroup.Post("/signup", userHandler.SignUpUser)
+	userGroup.Post("/signin", userHandler.SignInUser)
+
 
 	lc.Append(fx.Hook{
 		OnStart: func (ctx context.Context) error {
