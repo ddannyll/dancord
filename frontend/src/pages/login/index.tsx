@@ -26,7 +26,7 @@ export default function Login() {
         }
         try {
             const {id: userId} = await authService.signIn(data.username, data.password)
-            setAuthUser({userId: String(userId)})
+            setAuthUser({userId: userId})
             router.push('/')
         } catch {
             toast.error('Failed to sign in')

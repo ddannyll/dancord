@@ -1,6 +1,6 @@
 import { Message, deleteMessageRequest, fetchChannelDetails, fetchChannelMessages, postMessageEditRequest, postMessageRequest } from '@/fetchers'
 import { v4 as uuidv4 } from 'uuid';
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { AuthContext } from '@/pages/_app';
 import { applyFn, compareMessageByDate } from '@/helpers';
