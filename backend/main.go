@@ -57,11 +57,13 @@ func newFiberServer(
 	app.Get("/swagger/*", swagger.HandlerDefault)
 
 	// API Routes
-	app.Get("/ping", authMiddleware.AuthenticateRoute, pingHandler.Ping)
+	app.Get("/ping", pingHandler.Ping)
 	userGroup := app.Group("/user")
 	userGroup.Post("/signup", userHandler.SignUpUser)
 	userGroup.Post("/signin", userHandler.SignInUser)
 	userGroup.Post("/signout", userHandler.SignOutUser)
+	userGroup.Get("/healthcheck", authMiddleware.AuthenticateRoute, userHandler.SignOutUser)
+
 
 
 

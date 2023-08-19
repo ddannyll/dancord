@@ -7,6 +7,7 @@ import (
 	"github.com/ddannyll/dancord/backend/storage"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserHandler struct {
@@ -43,9 +44,14 @@ func (u *UserHandler) SignUpUser(c *fiber.Ctx) error {
 		return err
 	}
 
+	hashedPassword, err := hashPassword(user.Password)
+	if err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "invalid password")
+	}
+
 	userId, err := u.Storage.CreateNewUser(storage.NewUser{
 		Username: user.Username,
-		HashedPassword: user.Password,
+		HashedPassword: hashedPassword,
 	})
 	if err != nil {
 		return err
@@ -85,7 +91,7 @@ func (u *UserHandler) SignInUser(c *fiber.Ctx) error {
 	if err != nil {
 		return fiber.NewError(fiber.StatusUnauthorized, "invalid username and/or password")
 	}
-	if userFromStorage.HashedPassword != user.Password { // rn pw isnt hashed
+	if !checkPasswordHash(user.Password, userFromStorage.HashedPassword) { // rn pw isnt hashed
 		return fiber.NewError(fiber.StatusUnauthorized, "invalid username and/or password")
 	}
 
@@ -125,4 +131,30 @@ func (u *UserHandler) SignOutUser(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"success": true,
 	})
+}
+
+// Signin godoc
+//	@Summary	Check if a user is signed in
+//	@description
+//	@Tags		user
+//	@Produce	json
+//	@Success	200	"if signed in `{"success": true}`"
+//  @Failure	401 "if not signed in"
+//	@Router		/user/healthcheck [get]
+func (u *UserHandler) HealthCheckUser(c *fiber.Ctx) error {
+	sess, err := u.SessionStore.Get(c)
+	if err != nil || sess.Get("auth") != true {
+		return fiber.NewError(fiber.StatusUnauthorized, "unauthorized")
+	}
+	return c.JSON(fiber.Map{"success": true})
+}
+
+func hashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
+
+func checkPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+    return err == nil
 }
