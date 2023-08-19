@@ -139,7 +139,7 @@ func (u *UserHandler) SignOutUser(c *fiber.Ctx) error {
 //	@Tags		user
 //	@Produce	json
 //	@Success	200	"if signed in `{"success": true}`"
-//  @Failure	401 "if not signed in"
+//	@Failure	401	"if not signed in"
 //	@Router		/user/healthcheck [get]
 func (u *UserHandler) HealthCheckUser(c *fiber.Ctx) error {
 	sess, err := u.SessionStore.Get(c)

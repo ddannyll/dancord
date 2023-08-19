@@ -62,7 +62,7 @@ func newFiberServer(
 	userGroup.Post("/signup", userHandler.SignUpUser)
 	userGroup.Post("/signin", userHandler.SignInUser)
 	userGroup.Post("/signout", userHandler.SignOutUser)
-	userGroup.Get("/healthcheck", authMiddleware.AuthenticateRoute, userHandler.SignOutUser)
+	userGroup.Get("/healthcheck", authMiddleware.AuthenticateRoute, userHandler.HealthCheckUser)
 
 
 

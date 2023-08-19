@@ -38,6 +38,25 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/healthcheck": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Check if a user is signed in",
+                "responses": {
+                    "200": {
+                        "description": "if signed in ` + "`" + `{\"success\": true}` + "`" + `"
+                    },
+                    "401": {
+                        "description": "if not signed in"
+                    }
+                }
+            }
+        },
         "/user/signin": {
             "post": {
                 "consumes": [

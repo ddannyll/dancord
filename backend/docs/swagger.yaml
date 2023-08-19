@@ -38,6 +38,18 @@ paths:
       summary: Ping the server
       tags:
       - ping
+  /user/healthcheck:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'if signed in `{"success": true}`'
+        "401":
+          description: if not signed in
+      summary: Check if a user is signed in
+      tags:
+      - user
   /user/signin:
     post:
       consumes:
