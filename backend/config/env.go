@@ -18,9 +18,9 @@ func LoadEnv() EnvVars {
     if !exists {
         panic("Failed to load environment variables! Is .env setup correctly?")
     }
-    listen_on, exists := os.LookupEnv("LISTEN_ON")
+    listenOn, exists := os.LookupEnv("LISTEN_ON")
     if !exists {
-        listen_on = "127.0.0.1"
+        listenOn = "127.0.0.1"
     }
     port, exists := os.LookupEnv("PORT")
     if !exists {
@@ -28,8 +28,7 @@ func LoadEnv() EnvVars {
     }
     return EnvVars{
         DSN: dsn,
-        LISTEN_ON: listen_on,
+        LISTEN_ON: listenOn,
         PORT: port,
     }
-    
 }

@@ -15,7 +15,8 @@ definitions:
   UserSigninResponse:
     properties:
       id:
-        type: integer
+        example: "1337"
+        type: string
     type: object
 info:
   contact: {}

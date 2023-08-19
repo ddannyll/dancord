@@ -1,6 +1,9 @@
 package handlers
 
 import (
+	"fmt"
+
+	"github.com/ddannyll/dancord/backend/config"
 	"github.com/ddannyll/dancord/backend/storage"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
@@ -11,7 +14,8 @@ type UserHandler struct {
 	SessionStore *session.Store
 }
 
-func NewUserHandler(storage *storage.UserStorage, sessionStore *session.Store) *UserHandler {
+func NewUserHandler(storage *storage.UserStorage, sessionStore *session.Store, config config.EnvVars) *UserHandler {
+
 	return &UserHandler{Storage: storage, SessionStore: sessionStore}
 }
 
@@ -21,7 +25,7 @@ type userCredentialsBody struct {
 }//@name UserCredentials
 
 type userSigninSuccessResponse struct {
-	Id int `json:"id"`
+	Id string `json:"id" example:"1337"`
 }//@name UserSigninResponse
 
 // SignUp godoc
@@ -56,7 +60,7 @@ func (u *UserHandler) SignUpUser(c *fiber.Ctx) error {
 	sess.Save()
 
 	resp := userSigninSuccessResponse{
-		Id: userId,
+		Id: fmt.Sprint(userId),
 	}
 	return c.JSON(resp)
 }
@@ -96,7 +100,7 @@ func (u *UserHandler) SignInUser(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(userSigninSuccessResponse{
-		Id: userFromStorage.Id,
+		Id: fmt.Sprint(userFromStorage.Id),
 	})
 }
 
