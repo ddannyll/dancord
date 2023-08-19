@@ -3,6 +3,7 @@ import { useContext } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { AuthContext } from '../_app'
 import { useRouter } from 'next/router'
+import { toast } from 'react-toastify'
 
 type LoginInputs = {
     username: string
@@ -15,13 +16,20 @@ const RequiredStar = () => (<div className="text-red-500 inline text-xs pl-1">*<
 
 export default function Login() {
     const router = useRouter()
-    const {authUser, setAuthUser} = useContext(AuthContext)
+    const {setAuthUser, authService} = useContext(AuthContext)
     const { register, handleSubmit, formState: {errors} } = useForm<LoginInputs>()
 
-    const onSubmit: SubmitHandler<LoginInputs> = data => {
-        if (data.username === 'd' && data.password === 'w' && setAuthUser) {
-            setAuthUser({token: 'cooltoken', user: 'danielwangid'})
+    const onSubmit: SubmitHandler<LoginInputs> = async data => {
+        if (!authService || !setAuthUser) {
+            toast.error('No auth service!')
+            return
+        }
+        try {
+            const {id: userId} = await authService.signIn(data.username, data.password)
+            setAuthUser({userId: String(userId)})
             router.push('/')
+        } catch {
+            toast.error('Failed to sign in')
         }
     }
 

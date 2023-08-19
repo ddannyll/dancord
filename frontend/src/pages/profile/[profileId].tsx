@@ -6,6 +6,6 @@ export default function Profile() {
     const { authUser } = useContext(AuthContext)
 
     return <Layout>
-        {authUser?.user}
+        {authUser?.userId}
     </Layout>
 }

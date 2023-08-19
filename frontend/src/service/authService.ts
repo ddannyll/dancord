@@ -7,7 +7,6 @@ export interface AuthService {
     signUp: (username: string, password: string) => Promise<{id: number}>
     signOut: () => Promise<boolean>
     isSignedIn: () => Promise<boolean>
-    userId: number | null
 }
 
 /**
@@ -18,10 +17,8 @@ export interface AuthService {
  */
 export class HTTPAuthService implements AuthService {
     backendURL: URL
-    userId: number | null
     constructor(backendURL: URL) {
         this.backendURL = backendURL
-        this.userId = null
     }
     signIn = async (username: string, password:string) => {
         const url = new URL(this.backendURL)
@@ -40,8 +37,6 @@ export class HTTPAuthService implements AuthService {
             throw new Error(await response.text())
         }
         const responseJson = await response.json() as {id: number}
-        this.userId = responseJson.id
-        console.log(this.userId)
         return responseJson
     }
     signUp = async (username: string, password:string) => {

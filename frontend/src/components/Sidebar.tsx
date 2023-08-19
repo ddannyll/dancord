@@ -1,5 +1,6 @@
 
 import { ServerDetails, fetchAllServers } from '@/fetchers'
+import { applyFn } from '@/helpers'
 import { AuthContext } from '@/pages/_app'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -14,7 +15,7 @@ import useSWR from 'swr'
 
 export function Sidebar() {
     const {authUser} = useContext(AuthContext)
-    const {data: serverDetailsList, error } = useSWR<ServerDetails[]>(fetchAllServers)
+    const {data: serverDetailsList, error } = useSWR([fetchAllServers], applyFn<void, ServerDetails[]>)
     // TODO: get servers the user is in and display them
 
     useEffect(() => {
@@ -23,9 +24,11 @@ export function Sidebar() {
         }
     }, [error])
 
+    console.log(serverDetailsList)
+
     return <div className="shrink-0 w-[75px] bg-zinc-900 overflow-y-auto text-zinc-50 flex flex-col items-center pt-3 gap-y-3">
         <ServerIcon
-            href={`/profile/${authUser?.user}`}
+            href={`/profile/${authUser?.userId}`}
         >
             <FontAwesomeIcon icon={faUser} className='h-[25px] w-[25px]'/>
         </ServerIcon>

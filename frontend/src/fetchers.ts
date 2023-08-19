@@ -33,10 +33,10 @@ export interface UserDetails {
     image: string | null
 }
 
-export const fetchAllServers: Fetcher<ServerDetails[], string> = async () => {
+export const fetchAllServers = async () => {
     // TODO: replace stub code with backend request
+    console.log('fetching all servers')
     await new Promise(resolve => setTimeout(resolve, 1000)) // delay for simulate network delay
-
     const dummyData = [
         {
             name: 'server1',
@@ -54,7 +54,7 @@ export const fetchAllServers: Fetcher<ServerDetails[], string> = async () => {
     return dummyData
 }
 
-export const fetchServer: Fetcher<ServerDetails, {serverId: string}> = async ({serverId}) => {
+export const fetchServer = async ({serverId} : {serverId: string}) => {
     const dummyData = {
         name: 'server1',
         image: 'https://placehold.co/100x100.png',

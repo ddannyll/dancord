@@ -1,5 +1,4 @@
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
 import { Sidebar } from './Sidebar';
 import { useContext, useEffect } from 'react';
 import { AuthContext } from '@/pages/_app';
@@ -11,12 +10,11 @@ import { fetchServer } from '@/fetchers';
 export default function Layout({children} : {children?: React.ReactNode}) {
     const {authUser} = useContext(AuthContext)
     const router = useRouter()
-    // useEffect(() => {
-    //     if (!authUser?.token) {
-    //         router.push('/login')
-
-    //     }
-    // }, [authUser?.token, router])
+    useEffect(() => {
+        if (!authUser?.userId) {
+            router.push('/login')
+        }
+    }, [authUser, router])
 
     const serverId = router.query.serverId
     const {data: serverDetails} = useSWR({serverId}, fetchServer)
@@ -44,8 +42,5 @@ export default function Layout({children} : {children?: React.ReactNode}) {
             }
             {children}
         </main>
-        <ToastContainer
-            theme="dark"
-        />
     </div>
 }

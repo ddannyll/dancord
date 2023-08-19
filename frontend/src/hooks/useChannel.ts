@@ -27,7 +27,7 @@ export default function useChannel({channelId}: {channelId: string}) {
             reactions: [],
             timeSent: new Date(),
             lastEdited: null,
-            sentBy: authUser?.user as string,
+            sentBy: authUser?.userId as string,
             optimistic: true,
         }
         setMessages(messages => [...messages, optimisticMessage])
