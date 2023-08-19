@@ -11,7 +11,7 @@ interface AuthUser {
 
 interface AuthContextInterface {
     authUser: AuthUser | null,
-    setAuthUser: ((authUser: AuthUser) => void) | null
+    setAuthUser: ((authUser: AuthUser|null) => void) | null
     authService: AuthService | null
 }
 
