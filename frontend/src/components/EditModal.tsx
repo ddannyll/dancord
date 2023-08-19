@@ -1,5 +1,4 @@
 import * as Dialog from '@radix-ui/react-dialog';
-import { fireEvent } from '@testing-library/react';
 
 interface EditModelProps {
     open: boolean

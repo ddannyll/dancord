@@ -1,5 +1,5 @@
 
-import { fetchAllServers } from '@/fetchers'
+import { ServerDetails, fetchAllServers } from '@/fetchers'
 import { AuthContext } from '@/pages/_app'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -14,7 +14,7 @@ import useSWR from 'swr'
 
 export function Sidebar() {
     const {authUser} = useContext(AuthContext)
-    const {data: serverDetailsList, error } = useSWR(fetchAllServers)
+    const {data: serverDetailsList, error } = useSWR<ServerDetails[]>(fetchAllServers)
     // TODO: get servers the user is in and display them
 
     useEffect(() => {
