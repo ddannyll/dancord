@@ -33,7 +33,7 @@ export interface UserDetails {
     image: string | null
 }
 
-export const fetchAllServers: Fetcher<ServerDetails[], string> = async (token) => {
+export const fetchAllServers: Fetcher<ServerDetails[], string> = async () => {
     // TODO: replace stub code with backend request
     await new Promise(resolve => setTimeout(resolve, 1000)) // delay for simulate network delay
 
@@ -54,7 +54,7 @@ export const fetchAllServers: Fetcher<ServerDetails[], string> = async (token) =
     return dummyData
 }
 
-export const fetchServer: Fetcher<ServerDetails, {token: string, serverId: string}> = async ({token, serverId}) => {
+export const fetchServer: Fetcher<ServerDetails, {serverId: string}> = async ({serverId}) => {
     const dummyData = {
         name: 'server1',
         image: 'https://placehold.co/100x100.png',
@@ -99,11 +99,11 @@ let dummyMessages: Message[] = [
     },
 ]
 
-export const fetchChannelMessages = async ({token, channelId}: {token: string, channelId:string}): Promise<Message[]> => {
+export const fetchChannelMessages = async ({channelId}: {channelId:string}): Promise<Message[]> => {
     return dummyMessages
 }
 
-export const fetchChannelDetails = async ({token, channelId}: {token: string, channelId:string}) => {
+export const fetchChannelDetails = async ({channelId}: {channelId:string}) => {
     await new Promise(resolve => setTimeout(resolve, 1000)) // delay for simulate network delay
 
     const dummyData = {
@@ -114,7 +114,7 @@ export const fetchChannelDetails = async ({token, channelId}: {token: string, ch
     return dummyData
 }
 
-export const postMessageRequest = async (token: string, channelId: string, message: string): Promise<Message> => {
+export const postMessageRequest = async (channelId: string, message: string): Promise<Message> => {
     await new Promise(resolve => setTimeout(resolve, 1000)) // delay for simulate network delay
     if (message.includes('bad')) {
         throw new Error('Failed to add new message')
@@ -131,13 +131,13 @@ export const postMessageRequest = async (token: string, channelId: string, messa
     return newMessage
 }
 
-export const deleteMessageRequest = async (token: string, messageId: string): Promise<boolean> => {
+export const deleteMessageRequest = async (messageId: string): Promise<boolean> => {
     await new Promise(resolve => setTimeout(resolve, 1000)) // delay for simulate network delay
     dummyMessages = dummyMessages.filter(message => message.messageId !== messageId)
     return true
 }
 
-export const postMessageEditRequest = async (token: string, messageId: string, messageString: string): Promise<Message> => {
+export const postMessageEditRequest = async (messageId: string, messageString: string): Promise<Message> => {
     await new Promise(resolve => setTimeout(resolve, 1000)) // delay for simulate network delay
     const message = dummyMessages.find(message => message.messageId === messageId)
     if (message) {
@@ -147,7 +147,7 @@ export const postMessageEditRequest = async (token: string, messageId: string, m
     throw new Error('Failed to edit message')
 }
 
-export const getUserDetails = async (token: string, userId: string): Promise<UserDetails> => {
+export const getUserDetails = async (userId: string): Promise<UserDetails> => {
     await new Promise(resolve => setTimeout(resolve, 1000)) // delay for simulate network delay
     return {
         username: userId + 'name',

@@ -11,15 +11,15 @@ import { fetchServer } from '@/fetchers';
 export default function Layout({children} : {children?: React.ReactNode}) {
     const {authUser} = useContext(AuthContext)
     const router = useRouter()
-    useEffect(() => {
-        if (!authUser?.token) {
-            router.push('/login')
+    // useEffect(() => {
+    //     if (!authUser?.token) {
+    //         router.push('/login')
 
-        }
-    }, [authUser?.token, router])
+    //     }
+    // }, [authUser?.token, router])
 
     const serverId = router.query.serverId
-    const {data: serverDetails} = useSWR({token: authUser?.token, serverId}, fetchServer)
+    const {data: serverDetails} = useSWR({serverId}, fetchServer)
 
     return <div className='bg-zinc-700 w-screen h-screen overflow-hidden flex'>
         <Sidebar />

@@ -20,10 +20,10 @@ export function formatDate (date: string | Date) {
 }
 
 const profileInfoCache = new Map<string, UserDetails>()
-export async function attachMessageSenderInfo(token: string, message: Message): Promise<MessageWithSenderDetails> {
+export async function attachMessageSenderInfo(message: Message): Promise<MessageWithSenderDetails> {
     if (!profileInfoCache.has(message.sentBy)) {
         // details not in cache so we have to fetch them
-        const fetchedUserDetails = await getUserDetails(token, message.sentBy)
+        const fetchedUserDetails = await getUserDetails(message.sentBy)
         profileInfoCache.set(message.sentBy, fetchedUserDetails)
     }
     const senderDetails = profileInfoCache.get(message.sentBy) as UserDetails

@@ -14,7 +14,7 @@ import useSWR from 'swr'
 
 export function Sidebar() {
     const {authUser} = useContext(AuthContext)
-    const {data: serverDetailsList, error } = useSWR(authUser?.token, fetchAllServers)
+    const {data: serverDetailsList, error } = useSWR(fetchAllServers)
     // TODO: get servers the user is in and display them
 
     useEffect(() => {

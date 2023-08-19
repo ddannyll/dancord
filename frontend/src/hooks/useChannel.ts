@@ -6,21 +6,16 @@ import { AuthContext } from '@/pages/_app';
 import { applyFn, compareMessageByDate } from '@/helpers';
 
 
-interface ChannelIdToken {
-    channelId: string
-    token: string
-}
-
-export default function useChannel({channelId, token}: ChannelIdToken) {
+export default function useChannel({channelId}: {channelId: string}) {
     const [messages, setMessages] = useState<Message[]>([])
     const {authUser} = useContext(AuthContext)
 
     const {data: initialMessages} = useSWR(
-        [fetchChannelMessages, {channelId, token}],
+        [fetchChannelMessages, {channelId}],
         applyFn<Parameters<typeof fetchChannelMessages>[0], ReturnType<typeof fetchChannelMessages>>
     )
     const {data: channelDetails} = useSWR(
-        [fetchChannelDetails, {channelId, token}],
+        [fetchChannelDetails, {channelId}],
         applyFn<Parameters<typeof fetchChannelDetails>[0], ReturnType<typeof fetchChannelDetails>>
     )
 
@@ -37,7 +32,7 @@ export default function useChannel({channelId, token}: ChannelIdToken) {
         }
         setMessages(messages => [...messages, optimisticMessage])
         try {
-            const actualMessage = await postMessageRequest(authUser?.token || '', channelId, messageText)
+            const actualMessage = await postMessageRequest(channelId, messageText)
             setMessages(messages =>
                 [
                     ...messages.filter(m => m.messageId !== tmpId),
@@ -56,7 +51,7 @@ export default function useChannel({channelId, token}: ChannelIdToken) {
             throw new Error('Invalid messageId to delete')
         }
         // maybe TODO: optimistic UI for message deletion
-        const success = await deleteMessageRequest(token, messageId)
+        const success = await deleteMessageRequest(messageId)
         if (!success) {
             throw new Error('Failed to delete message')
         }
@@ -68,7 +63,7 @@ export default function useChannel({channelId, token}: ChannelIdToken) {
             throw new Error('Invalid messageId to edit')
         }
         try {
-            const newMessage = await postMessageEditRequest(token, messageId, editedMessage)
+            const newMessage = await postMessageEditRequest(messageId, editedMessage)
             setMessages(messages => [
                 ...messages.filter(m => m.messageId !== messageId),
                 newMessage,

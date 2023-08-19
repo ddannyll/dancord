@@ -11,13 +11,13 @@ export default function Channel() {
     const router = useRouter()
     const {authUser} = useContext(AuthContext)
     const channelId = router.query.channelId
-    const {messages, channelName, sendMessage, deleteMessage, editMessage} = useChannel({channelId: channelId as string, token: authUser?.token || ''})
+    const {messages, channelName, sendMessage, deleteMessage, editMessage} = useChannel({channelId: channelId as string})
 
     // TODO: put this shit in its own hook
     const [messagesWithSenderInfo, setMessagesWithSenderInfo] = useState<MessageWithSenderDetails[]>([])
     useEffect(() => {
         const attachInfo = async () => {
-            const withInfo = await Promise.all(messages.map(message => attachMessageSenderInfo(authUser?.token || '', message)))
+            const withInfo = await Promise.all(messages.map(message => attachMessageSenderInfo(message)))
             setMessagesWithSenderInfo(withInfo)
         }
         attachInfo()
