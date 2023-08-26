@@ -38,6 +38,22 @@ const docTemplate = `{
                 }
             }
         },
+        "/server/new": {
+            "post": {
+                "description": "A logged in user is able to create a new server.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "server"
+                ],
+                "summary": "Create a new server on dancord",
+                "responses": {}
+            }
+        },
         "/user/healthcheck": {
             "get": {
                 "produces": [
