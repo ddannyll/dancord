@@ -27,7 +27,7 @@
 - Users can update profile
   - Profile Statuses
  
-## Database Schema
+## Database Schema (WIP)
 ![DANCORD](https://github.com/ddannyll/dancord/assets/80935652/69230ca9-42db-453e-9dce-7ce3b5bfe7ca)
 
 > ✔️ [**NEW API DOCS**(WIP)](https://dancord-production.up.railway.app/swagger/index.html)
