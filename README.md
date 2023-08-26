@@ -3,7 +3,7 @@
 ## MVP Features
 
 - Authentication
-  - Login with google + username/password encryption
+  - Login with google + username/password hashing/encryption
 - Create server
   - Server Name + Image
   - Server invite link
