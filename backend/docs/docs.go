@@ -38,9 +38,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/server/new": {
+        "/server/join": {
             "post": {
-                "description": "A logged in user is able to create a new server.",
+                "description": "A logged in user is able to join a server given a valid invite code, the serverId is returned",
                 "consumes": [
                     "application/json"
                 ],
@@ -50,8 +50,52 @@ const docTemplate = `{
                 "tags": [
                     "server"
                 ],
+                "summary": "Join a server given an invite code",
+                "parameters": [
+                    {
+                        "description": "Valid invite code",
+                        "name": "inviteCode",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.joinServerRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.joinServerResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid invite code"
+                    },
+                    "401": {
+                        "description": "User is not logged in/not authorized"
+                    }
+                }
+            }
+        },
+        "/server/new": {
+            "post": {
+                "description": "A logged in user is able to create a new server.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "server"
+                ],
                 "summary": "Create a new server on dancord",
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.newServerResponse"
+                        }
+                    }
+                }
             }
         },
         "/user/healthcheck": {
@@ -185,6 +229,33 @@ const docTemplate = `{
                 "id": {
                     "type": "string",
                     "example": "1337"
+                }
+            }
+        },
+        "handlers.joinServerRequest": {
+            "type": "object",
+            "properties": {
+                "joinCode": {
+                    "type": "string",
+                    "example": "53Asd2ds"
+                }
+            }
+        },
+        "handlers.joinServerResponse": {
+            "type": "object",
+            "properties": {
+                "serverId": {
+                    "type": "string",
+                    "example": "5020"
+                }
+            }
+        },
+        "handlers.newServerResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "5020"
                 }
             }
         }
