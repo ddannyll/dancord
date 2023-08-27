@@ -68,7 +68,7 @@ func newFiberServer(
   serverGroup := app.Group("/server")
   serverGroup.Post("/new", serverHandler.NewServer)
   serverGroup.Post("/join", serverHandler.JoinServer)
-  serverGroup.Post("/join/new", serverHandler.NewJoinLink)
+  serverGroup.Post("/join/new", serverHandler.NewJoinCode)
   serverGroup.Get("/list", serverHandler.ListServers)
   serverGroup.Delete("/", serverHandler.DeleteServer)
 

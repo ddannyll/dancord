@@ -22,11 +22,12 @@ func NewServerHandler(serverStore *storage.ServerStore) *ServerHandler {
 
 // NewServer godoc
 //	@Summary		Create a new server on dancord
-//	@description	A logged in user is able to create a new server.
+//	@Description	A logged in user is able to create a new server.
 //	@Tags			server
 //	@Produce		json
 //	@Success		200	{object}	newServerResponse
 //	@Router			/server/new [post]
+//  @Failure    401 "User is not logged in"
 func (s *ServerHandler) NewServer(ctx *fiber.Ctx) error {
   return fiber.NewError(http.StatusNotImplemented)
 }
@@ -36,7 +37,8 @@ type newServerResponse struct {
 
 // JoinServer godoc
 //	@Summary		Join a server given an invite code
-//	@description	A logged in user is able to join a server given a valid invite code, the serverId is returned
+//	@Description	A logged in user is able to join a server given a valid invite code. 
+//	@Description	The serverId is returned
 //	@Tags			server
 //	@Accept			json
 //	@Param			inviteCode	body	joinServerRequest	true	"Valid invite code"
@@ -55,15 +57,51 @@ type joinServerResponse struct {
   ServerId string `json:"serverId" example:"5020"`
 }
 
-
-func (s *ServerHandler) NewJoinLink(ctx *fiber.Ctx) error {
+// NewJoinCode godoc
+//	@Summary		Create a new join link for a specified server
+//	@Description	Only server admins should be able to do this
+//	@Tags			server
+//	@Accept			json 
+//	@Param			serverId	body	newJoinCodeReqeust	true	"Valid serverId"
+//	@Produce		json 
+//	@Success		200	{object}	newJoinCodeResponse
+//	@Failure		401	"User is not logged in"
+//	@Failure		403	"User is not an admin"
+//	@Router			/server/join/new [post] 
+func (s *ServerHandler) NewJoinCode(ctx *fiber.Ctx) error {
   return fiber.NewError(http.StatusNotImplemented) 
 }
+type newJoinCodeReqeust struct {
+  ServerId string `json:"serverId" example:"5020"`
+}
+type newJoinCodeResponse struct {
+  JoinCode string `json:"joinCode" example:"53Asd2ds"`
+}
 
+// ListServers godoc 
+//	@Summary		List the servers the user is in 
+//	@Description	Return a list of servers the user is currently in 
+//	@Tags			server 
+//	@Produce		json 
+//	@Success		200	{object}	listServersResponse
+//	@Failure		401	"User is not logged in"
+//	@Router			/server/list [get]
 func (s *ServerHandler) ListServers(ctx *fiber.Ctx) error {
   return fiber.NewError(http.StatusNotImplemented) 
 }
+type listServersResponse struct {
+  Servers []string
+}
 
+// DeleteServer godoc 
+//	@Summary		Delete a server
+//	@Description	Only admins can delete their server 
+//	@Tags			server 
+//	@Produce		json 
+//	@Success		200	"`{success: true}`"
+//	@Failure		401	"User is not logged in"
+//	@Failure		403	"User is not an admin in te server"
+//	@Router			/server [delete]
 func (s *ServerHandler) DeleteServer(ctx *fiber.Ctx) error {
   return fiber.NewError(http.StatusNotImplemented) 
 }
