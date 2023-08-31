@@ -27,6 +27,7 @@ func newFiberServer(
 	db *sqlx.DB, 
 	userHandler *handlers.UserHandler, 
 	pingHandler *handlers.PingHandler,
+  serverHandler *handlers.ServerHandler,
 	authMiddleware *handlers.AuthMiddleware,
 	config config.EnvVars,
 ) {
@@ -64,8 +65,12 @@ func newFiberServer(
 	userGroup.Post("/signout", userHandler.SignOutUser)
 	userGroup.Get("/healthcheck", authMiddleware.AuthenticateRoute, userHandler.HealthCheckUser)
 
-
-
+  serverGroup := app.Group("/server")
+  serverGroup.Post("/new", serverHandler.NewServer)
+  serverGroup.Post("/join", serverHandler.JoinServer)
+  serverGroup.Post("/join/new", serverHandler.NewJoinCode)
+  serverGroup.Get("/list", serverHandler.ListServers)
+  serverGroup.Delete("/", serverHandler.DeleteServer)
 
 	lc.Append(fx.Hook{
 		OnStart: func (ctx context.Context) error {
@@ -87,9 +92,11 @@ func main() {
 			db.CreateMySQLConnection,
 			storage.NewUserStorage,
 			storage.NewSessionStorage,
+      storage.NewServerStorage,
 			handlers.NewUserHandler,
 			handlers.NewPingHandler,
 			handlers.NewAuthMiddleware,
+      handlers.NewServerHandler,
 		),
 		fx.Invoke(newFiberServer),
 	).Run()

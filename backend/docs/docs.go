@@ -38,6 +38,152 @@ const docTemplate = `{
                 }
             }
         },
+        "/server": {
+            "delete": {
+                "description": "Only admins can delete their server",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "server"
+                ],
+                "summary": "Delete a server",
+                "responses": {
+                    "200": {
+                        "description": "` + "`" + `{success: true}` + "`" + `"
+                    },
+                    "401": {
+                        "description": "User is not logged in"
+                    },
+                    "403": {
+                        "description": "User is not an admin in te server"
+                    }
+                }
+            }
+        },
+        "/server/join": {
+            "post": {
+                "description": "A logged in user is able to join a server given a valid invite code.\nThe serverId is returned",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "server"
+                ],
+                "summary": "Join a server given an invite code",
+                "parameters": [
+                    {
+                        "description": "Valid invite code",
+                        "name": "inviteCode",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.joinServerRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.joinServerResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid invite code"
+                    },
+                    "401": {
+                        "description": "User is not logged in/not authorized"
+                    }
+                }
+            }
+        },
+        "/server/join/new": {
+            "post": {
+                "description": "Only server admins should be able to do this",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "server"
+                ],
+                "summary": "Create a new join link for a specified server",
+                "parameters": [
+                    {
+                        "description": "Valid serverId",
+                        "name": "serverId",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.newJoinCodeReqeust"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.newJoinCodeResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "User is not logged in"
+                    },
+                    "403": {
+                        "description": "User is not an admin"
+                    }
+                }
+            }
+        },
+        "/server/list": {
+            "get": {
+                "description": "Return a list of servers the user is currently in",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "server"
+                ],
+                "summary": "List the servers the user is in",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.listServersResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "User is not logged in"
+                    }
+                }
+            }
+        },
+        "/server/new": {
+            "post": {
+                "description": "A logged in user is able to create a new server.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "server"
+                ],
+                "summary": "Create a new server on dancord",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.newServerResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/user/healthcheck": {
             "get": {
                 "produces": [
@@ -169,6 +315,62 @@ const docTemplate = `{
                 "id": {
                     "type": "string",
                     "example": "1337"
+                }
+            }
+        },
+        "handlers.joinServerRequest": {
+            "type": "object",
+            "properties": {
+                "joinCode": {
+                    "type": "string",
+                    "example": "53Asd2ds"
+                }
+            }
+        },
+        "handlers.joinServerResponse": {
+            "type": "object",
+            "properties": {
+                "serverId": {
+                    "type": "string",
+                    "example": "5020"
+                }
+            }
+        },
+        "handlers.listServersResponse": {
+            "type": "object",
+            "properties": {
+                "servers": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "handlers.newJoinCodeReqeust": {
+            "type": "object",
+            "properties": {
+                "serverId": {
+                    "type": "string",
+                    "example": "5020"
+                }
+            }
+        },
+        "handlers.newJoinCodeResponse": {
+            "type": "object",
+            "properties": {
+                "joinCode": {
+                    "type": "string",
+                    "example": "53Asd2ds"
+                }
+            }
+        },
+        "handlers.newServerResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "5020"
                 }
             }
         }

@@ -18,6 +18,43 @@ definitions:
         example: "1337"
         type: string
     type: object
+  handlers.joinServerRequest:
+    properties:
+      joinCode:
+        example: 53Asd2ds
+        type: string
+    type: object
+  handlers.joinServerResponse:
+    properties:
+      serverId:
+        example: "5020"
+        type: string
+    type: object
+  handlers.listServersResponse:
+    properties:
+      servers:
+        items:
+          type: string
+        type: array
+    type: object
+  handlers.newJoinCodeReqeust:
+    properties:
+      serverId:
+        example: "5020"
+        type: string
+    type: object
+  handlers.newJoinCodeResponse:
+    properties:
+      joinCode:
+        example: 53Asd2ds
+        type: string
+    type: object
+  handlers.newServerResponse:
+    properties:
+      id:
+        example: "5020"
+        type: string
+    type: object
 info:
   contact: {}
   description: Backend API sepcifications for dancord
@@ -38,6 +75,103 @@ paths:
       summary: Ping the server
       tags:
       - ping
+  /server:
+    delete:
+      description: Only admins can delete their server
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '`{success: true}`'
+        "401":
+          description: User is not logged in
+        "403":
+          description: User is not an admin in te server
+      summary: Delete a server
+      tags:
+      - server
+  /server/join:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        A logged in user is able to join a server given a valid invite code.
+        The serverId is returned
+      parameters:
+      - description: Valid invite code
+        in: body
+        name: inviteCode
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.joinServerRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.joinServerResponse'
+        "400":
+          description: Invalid invite code
+        "401":
+          description: User is not logged in/not authorized
+      summary: Join a server given an invite code
+      tags:
+      - server
+  /server/join/new:
+    post:
+      consumes:
+      - application/json
+      description: Only server admins should be able to do this
+      parameters:
+      - description: Valid serverId
+        in: body
+        name: serverId
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.newJoinCodeReqeust'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.newJoinCodeResponse'
+        "401":
+          description: User is not logged in
+        "403":
+          description: User is not an admin
+      summary: Create a new join link for a specified server
+      tags:
+      - server
+  /server/list:
+    get:
+      description: Return a list of servers the user is currently in
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.listServersResponse'
+        "401":
+          description: User is not logged in
+      summary: List the servers the user is in
+      tags:
+      - server
+  /server/new:
+    post:
+      description: A logged in user is able to create a new server.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.newServerResponse'
+      summary: Create a new server on dancord
+      tags:
+      - server
   /user/healthcheck:
     get:
       produces:
