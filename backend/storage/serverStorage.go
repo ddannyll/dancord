@@ -9,3 +9,11 @@ type ServerStore struct {
 func NewServerStorage(db *sqlx.DB)  *ServerStore {
   return &ServerStore{Conn: db}
 }
+
+func (s ServerStore) CreateNewServer(serverName string) (string, error) {
+  return "14", nil
+}
+
+func (s ServerStore) UserJoinServer(userId, serverName string) error {
+  return nil
+}

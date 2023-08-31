@@ -29,7 +29,14 @@ func NewServerHandler(serverStore *storage.ServerStore) *ServerHandler {
 //	@Router			/server/new [post]
 //  @Failure    401 "User is not logged in"
 func (s *ServerHandler) NewServer(ctx *fiber.Ctx) error {
-  return fiber.NewError(http.StatusNotImplemented)
+  serverId, err := s.Storage.CreateNewServer("test")
+  if err != nil {
+    return err
+  } 
+  err = s.Storage.UserJoinServer("userId", serverId)
+  return ctx.JSON(newServerResponse{
+    Id: serverId,
+  })
 }
 type newServerResponse struct {
   Id string `json:"id" example:"5020"`
